@@ -2,10 +2,7 @@
 name: PULL REQUEST
 
 # 执行 CI 的时机: 当 git push 到 feature-* 分支时
-on:
-  pull-request:
-    branches:
-      - main
+on: pull-request
 
 jobs:
   build:
@@ -39,15 +36,6 @@ jobs:
         with:
           cache: 'yarn'
           node-version: 16
-
-      - name: Authenticate with Registry
-        run: |
-          echo "@apollo-elements:registry=http://registry.npmjs.org/" > .npmrc
-          echo "registry=http://registry.npmjs.org/" >> .npmrc
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
-          npm whoami
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
       - name: Install yarn
         run: npm install -g yarn@v1
