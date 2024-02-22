@@ -3,6 +3,8 @@ const fsp = require('fs').promises;
 const path = require('path');
 const mergewith = require('lodash.mergewith');
 
+const { updatePullRequest } = require('./updatePR');
+
 const titleReg = /^(\S+?)(?:\((\S+)\))?\s*[\:\：](.*)/g;
 const breakchangeReg = /^BREAKING CHANGE\s*[\:\：]\s*(\S.*)/g;
 
@@ -87,7 +89,7 @@ const main = async () => {
       }
     });
   });
-  await writeChangeLog(tmpResult, '2656521174974208', !isCI);
+  await writeChangeLog(tmpResult, '2656521174974208', isCI);
 };
 
 const isPackageChangeLogExist = async (libraryName) => {
@@ -110,7 +112,7 @@ const isPackageChangeLogExist = async (libraryName) => {
   }
 };
 
-const writeChangeLog = async (info, taskID, needWrite = true) => {
+const writeChangeLog = async (info, taskID, isCI = false) => {
   const rawInfos = await Promise.all(
     Object.entries(info).map(async ([libraryName, libraryInfo]) => {
       const targetPackagesDir = await isPackageChangeLogExist(libraryName);
@@ -131,7 +133,7 @@ const writeChangeLog = async (info, taskID, needWrite = true) => {
       ans += genChangeLog(libraryInfo, taskID);
       ans += '\n';
       const currentAdded = ans;
-      if (!needWrite) return [libraryName, currentAdded];
+      if (isCI) return [libraryName, currentAdded];
       let content = '';
       try {
         content = await fsp.readFile(changelogFile, { encoding: 'utf8' });
@@ -157,6 +159,7 @@ const writeChangeLog = async (info, taskID, needWrite = true) => {
     ans += '\n\n';
   });
   console.log(ans);
+  if (isCI) await updatePullRequest(ans);
 };
 
 const genChangeLog = ({ feat, fix, breakingChange }, taskID) => {
