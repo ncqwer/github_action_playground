@@ -1,12 +1,12 @@
 const { exec } = require('child_process');
-const merge = require('lodash.merge');
-
-// 使用git命令获取提交信息
-
-// 使用git命令获取提交信息，使用指定的格式化字符串输出
+const fsp = require('fs').promises;
+const mergewith = require('lodash.mergewith');
 
 const titleReg = /^(\S+?)(?:\((\S+)\))?\s*[\:\：](.*)/g;
 const breakchangeReg = /^BREAKING CHANGE\s*[\:\：]\s*(\S.*)/g;
+
+const repoCommitURL = 'http://github.com/commit/';
+const homepageURL = 'https://github.com/';
 
 const main = async () => {
   const commitsRaw = await new Promise((res, rej) => {
@@ -42,7 +42,7 @@ const main = async () => {
       let library_name = 'library_name from branch';
       if (titleResult) {
         const type = titleResult[1];
-        library_name = titleResult[2];
+        if (titleResult[2]) library_name = titleResult[2];
         const subject = titleResult[3];
         if (type === 'revert') {
           revertCommitMap[library_name] = true;
@@ -70,9 +70,11 @@ const main = async () => {
             [library_name]: {
               breakingChange: [
                 {
-                  breakingChange,
+                  subject: breakingChange,
                   authorName,
                   authorEmail,
+                  hash,
+                  shotHash,
                 },
               ],
             },
@@ -82,8 +84,37 @@ const main = async () => {
     });
   });
 
-  console.log(tmpResult);
+  const md = genChangeLog(tmpResult['library_name from branch']);
+  await fsp.writeFile('./CHANGELLOG.md', md, { encoding: 'utf-8' });
 };
+
+const genChangeLog = ({ feat, fix, breakingChange }) => {
+  let ans = '';
+  //
+  Object.entries({
+    '✨Features': feat,
+    '🐛Bug Fixes': fix,
+    '🚨BREAKING CHANGES': breakingChange,
+  }).forEach(([title, entries]) => {
+    if (!entries) return;
+    ans += `### ${title}\n`;
+
+    entries.forEach(({ hash, shotHash, authorName, subject }) => {
+      ans += `- [${shotHash}](${repoCommitURL}${hash}) Thanks [${authorName}](${homepageURL}${authorName}) ! - ${subject}\n`;
+    });
+    ans += '\n';
+  });
+  return ans;
+};
+
+main().catch((e) => {
+  console.error(e);
+});
+
+const merge = (a, b) =>
+  mergewith(a, b, (source, target) => {
+    if (Array.isArray(source)) return source.concat(target);
+  });
 
 const isValidType = (type) => {
   return !!{
@@ -91,7 +122,3 @@ const isValidType = (type) => {
     feat: true,
   }[type];
 };
-
-main().catch((e) => {
-  console.error(e);
-});
