@@ -8,7 +8,8 @@ const { updatePullRequest } = require('./updatePR');
 const titleReg = /^(\S+?)(?:\((\S+)\))?\s*[\:\：](.*)/g;
 const breakchangeReg = /^BREAKING CHANGE\s*[\:\：]\s*(\S.*)/g;
 
-const repoCommitURL = 'http://github.com/commit/';
+const repoCommitURL =
+  'https://github.com/ncqwer/github_action_playground/commit/';
 const homepageURL = 'https://github.com/';
 const taskURL =
   'https://projectmanage.netease-official.lcap.163yun.com/dashboard/TaskDetail?id=';

@@ -13,4 +13,4 @@ perf: 优化相关，比如提升性能、体验
 wowo that's amazing!!!
 
 
-successfull!!!
+successfuly!!!
