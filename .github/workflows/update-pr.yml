@@ -30,8 +30,6 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
-          echo ${{github.event.pull_request.head.ref}}
-          echo ${{github.event.pull_request.base.ref}}
           git checkout -b main origin/main
         env:
           GITHUB_TOKEN: ${{ github.token}}
