@@ -31,6 +31,7 @@
     "eslint-plugin-react": "^7.31.1",
     "jest": "^28",
     "lerna": "^5.4.3",
+    "node-fetch": "2",
     "postcss": "^8.4.16",
     "postcss-cli": "^10.0.0",
     "prettier": "^2.7.1",
