@@ -1,5 +1,6 @@
 const { exec } = require('child_process');
 const fsp = require('fs').promises;
+const path = require('path');
 const mergewith = require('lodash.mergewith');
 
 const titleReg = /^(\S+?)(?:\((\S+)\))?\s*[\:\：](.*)/g;
@@ -7,6 +8,8 @@ const breakchangeReg = /^BREAKING CHANGE\s*[\:\：]\s*(\S.*)/g;
 
 const repoCommitURL = 'http://github.com/commit/';
 const homepageURL = 'https://github.com/';
+const taskURL =
+  'https://projectmanage.netease-official.lcap.163yun.com/dashboard/TaskDetail?id=';
 
 const main = async () => {
   const commitsRaw = await new Promise((res, rej) => {
@@ -39,17 +42,17 @@ const main = async () => {
       const line = _line.trim();
       const titleResult = titleReg.exec(line);
       const breakChangeResult = breakchangeReg.exec(line);
-      let library_name = 'library_name from branch';
+      let libraryName = 'libraryB';
       if (titleResult) {
         const type = titleResult[1];
-        if (titleResult[2]) library_name = titleResult[2];
+        if (titleResult[2]) libraryName = titleResult[2];
         const subject = titleResult[3];
         if (type === 'revert') {
-          revertCommitMap[library_name] = true;
+          revertCommitMap[libraryName] = true;
         }
-        if (isValidType(type) && !!library_name) {
+        if (isValidType(type) && !!libraryName) {
           merge(tmpResult, {
-            [library_name]: {
+            [libraryName]: {
               [type]: [
                 {
                   subject,
@@ -67,7 +70,7 @@ const main = async () => {
         const breakingChange = breakChangeResult[1];
         if (breakingChange) {
           merge(tmpResult, {
-            [library_name]: {
+            [libraryName]: {
               breakingChange: [
                 {
                   subject: breakingChange,
@@ -83,14 +86,67 @@ const main = async () => {
       }
     });
   });
-
-  const md = genChangeLog(tmpResult['library_name from branch']);
-  await fsp.writeFile('./CHANGELLOG.md', md, { encoding: 'utf-8' });
+  await writeChangeLog(tmpResult, '2656521174974208');
 };
 
-const genChangeLog = ({ feat, fix, breakingChange }) => {
+const isPackageChangeLogExist = async (libraryName) => {
+  const [prefix] = libraryName.split(/[\-\_]/);
+
+  const targetPackagesDir = path.join(
+    '.',
+    'packages',
+    prefix.length === libraryName.length ? '' : prefix,
+    libraryName,
+  );
+  try {
+    await access(targetPackagesDir, constants.R_OK | constants.W_OK);
+    return targetPackagesDir;
+  } catch {
+    return null;
+  }
+};
+
+const writeChangeLog = async (info, taskID) => {
+  const rawInfos = await Promise.all(
+    Object.entries(info).map(async ([libraryName, libraryInfo]) => {
+      const targetPackagesDir = await isPackageChangeLogExist(libraryName);
+      if (!targetPackagesDir) return null;
+      const changelogFile = path.join(targetPackagesDir, 'CHANGELOG.md');
+      const packageFile = path.join(targetPackagesDir, 'package.json');
+      let content = '';
+      try {
+        content = await readFile(changelogFile, { encoding: 'utf8' });
+      } catch {
+        // do nothing;
+      }
+      const packageVersionContent = await readFile(packageFile, {
+        encoding: 'utf8',
+      });
+      const version = JSON.parse(packageVersionContent).version;
+      let ans = '';
+      ans += `## ${version}\n`;
+      ans += `Associated Task: [#${taskID.slice(0, 6)}](${taskURL}${taskID})\n`;
+      ans += genChangeLog(libraryInfo, taskID);
+      ans += '\n\n';
+      ans += content;
+
+      await fsp.writeFile(changelogFile, ans, 'utf-8');
+      return [libraryName, ans];
+    }),
+  );
+  const realInfos = rawInfos.filter(Boolean);
+
   let ans = '';
-  //
+  realInfos.forEach(([libraryName, content]) => {
+    ans += `## ${libraryName}\n`;
+    ans += content;
+    ans += '\n\n';
+  });
+  console.log(ans);
+};
+
+const genChangeLog = ({ feat, fix, breakingChange }, taskID) => {
+  let ans = '';
   Object.entries({
     '✨Features': feat,
     '🐛Bug Fixes': fix,
@@ -98,6 +154,7 @@ const genChangeLog = ({ feat, fix, breakingChange }) => {
   }).forEach(([title, entries]) => {
     if (!entries) return;
     ans += `### ${title}\n`;
+    ans += `Associated Task: [#${taskID.slice(0, 6)}](${taskURL}${taskID})\n`;
 
     entries.forEach(({ hash, shotHash, authorName, subject }) => {
       ans += `- [${shotHash}](${repoCommitURL}${hash}) Thanks [${authorName}](${homepageURL}${authorName}) ! - ${subject}\n`;
