@@ -12,6 +12,7 @@ const taskURL =
   'https://projectmanage.netease-official.lcap.163yun.com/dashboard/TaskDetail?id=';
 
 const main = async () => {
+  const isCI = process.argv[2] === 'ci';
   const commitsRaw = await new Promise((res, rej) => {
     exec(
       `git log --format===='%n%H;%h;%an;%ae%n%B' main..HEAD`,
@@ -86,7 +87,7 @@ const main = async () => {
       }
     });
   });
-  await writeChangeLog(tmpResult, '2656521174974208');
+  await writeChangeLog(tmpResult, '2656521174974208', !isCI);
 };
 
 const isPackageChangeLogExist = async (libraryName) => {
@@ -99,46 +100,59 @@ const isPackageChangeLogExist = async (libraryName) => {
     libraryName,
   );
   try {
-    await access(targetPackagesDir, constants.R_OK | constants.W_OK);
+    await fsp.access(
+      targetPackagesDir,
+      fsp.constants.R_OK | fsp.constants.W_OK,
+    );
     return targetPackagesDir;
   } catch {
     return null;
   }
 };
 
-const writeChangeLog = async (info, taskID) => {
+const writeChangeLog = async (info, taskID, needWrite = true) => {
   const rawInfos = await Promise.all(
     Object.entries(info).map(async ([libraryName, libraryInfo]) => {
       const targetPackagesDir = await isPackageChangeLogExist(libraryName);
       if (!targetPackagesDir) return null;
       const changelogFile = path.join(targetPackagesDir, 'CHANGELOG.md');
       const packageFile = path.join(targetPackagesDir, 'package.json');
-      let content = '';
-      try {
-        content = await readFile(changelogFile, { encoding: 'utf8' });
-      } catch {
-        // do nothing;
-      }
-      const packageVersionContent = await readFile(packageFile, {
+
+      const packageVersionContent = await fsp.readFile(packageFile, {
         encoding: 'utf8',
       });
       const version = JSON.parse(packageVersionContent).version;
       let ans = '';
-      ans += `## ${version}\n`;
-      ans += `Associated Task: [#${taskID.slice(0, 6)}](${taskURL}${taskID})\n`;
+      ans += `## ${version}\n\n`;
+      ans += `Associated Task: [#${taskID.slice(
+        0,
+        6,
+      )}](${taskURL}${taskID})\n\n`;
       ans += genChangeLog(libraryInfo, taskID);
-      ans += '\n\n';
-      ans += content;
-
+      ans += '\n';
+      const currentAdded = ans;
+      if (!needWrite) return [libraryName, currentAdded];
+      let content = '';
+      try {
+        content = await fsp.readFile(changelogFile, { encoding: 'utf8' });
+      } catch {
+        // do nothing;
+      }
+      const [latestMessage] = content.split(/(?<=[^\#])\#\#\s*([^\#\r\n]+)\s+/);
+      if (latestMessage.startsWith(`## ${version}\n\n`)) {
+        ans += content.slice(latestMessage.length);
+      } else {
+        ans += content;
+      }
       await fsp.writeFile(changelogFile, ans, 'utf-8');
-      return [libraryName, ans];
+      return [libraryName, currentAdded];
     }),
   );
   const realInfos = rawInfos.filter(Boolean);
 
   let ans = '';
   realInfos.forEach(([libraryName, content]) => {
-    ans += `## ${libraryName}\n`;
+    ans += `## ${libraryName}\n\n`;
     ans += content;
     ans += '\n\n';
   });
@@ -153,13 +167,13 @@ const genChangeLog = ({ feat, fix, breakingChange }, taskID) => {
     '🚨BREAKING CHANGES': breakingChange,
   }).forEach(([title, entries]) => {
     if (!entries) return;
-    ans += `### ${title}\n`;
-    ans += `Associated Task: [#${taskID.slice(0, 6)}](${taskURL}${taskID})\n`;
+    ans += `### ${title}\n\n`;
+    ans += `Associated Task: [#${taskID.slice(0, 6)}](${taskURL}${taskID})\n\n`;
 
     entries.forEach(({ hash, shotHash, authorName, subject }) => {
       ans += `- [${shotHash}](${repoCommitURL}${hash}) Thanks [${authorName}](${homepageURL}${authorName}) ! - ${subject}\n`;
     });
-    ans += '\n';
+    ans += '\n\n';
   });
   return ans;
 };
