@@ -12,7 +12,9 @@
     "build": "lerna run build --ignore doc",
     "dev": "cd playground && yarn dev",
     "publish": "yarn lerna publish",
-    "pkgadd": "node scripts/create.js"
+    "pkgadd": "node scripts/create.js",
+    "changelog": "node script/changelog.js",
+    "changelog:ci": "node script/changelog.js ci"
   },
   "license": "MIT",
   "devDependencies": {
@@ -33,6 +35,7 @@
     "lerna": "^5.4.3",
     "lodash.merge": "^4.6.2",
     "lodash.mergewith": "^4.6.2",
+    "node-fetch": "2",
     "postcss": "^8.4.16",
     "postcss-cli": "^10.0.0",
     "prettier": "^2.7.1",
