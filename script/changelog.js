@@ -20,7 +20,7 @@ const main = async () => {
       `git log --format===='%n%H;%h;%an;%ae%n%B' main..HEAD`,
       (err, stdout, stderr) => {
         if (err) {
-          rej(new Error(e.message));
+          rej(new Error(err.message));
           return;
         }
         if (stderr) {
