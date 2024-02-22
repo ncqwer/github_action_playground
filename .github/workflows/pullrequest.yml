@@ -2,7 +2,9 @@
 name: PULL REQUEST
 
 # 执行 CI 的时机: 当 git push 到 feature-* 分支时
-on: pull-request
+on:
+  pull_request:
+    branches: ['*']
 
 jobs:
   build:
