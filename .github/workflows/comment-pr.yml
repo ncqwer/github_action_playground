@@ -5,7 +5,7 @@ on:
     types: [created]
 
 permissions:
-  pull-requests: write
+  pull-requests: read
 
 jobs:
   generate-commit:
@@ -17,7 +17,7 @@ jobs:
       - name: Get branch name
         id: branch_name
         run: |
-          branch_name=$(curl -s -H "Authorization: token ${{ github.token }}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }} | jq -r '.head.ref')
+          branch_name=$(curl -s -H "Authorization: token ${{ github.token }}" ${{github.event.issue.pull_request.url}} | jq -r '.head.ref')
           echo $branch_name
       # - name: Checkout
       #   uses: actions/checkout/@v3
