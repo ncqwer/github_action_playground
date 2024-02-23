@@ -26,11 +26,12 @@ jobs:
           fetch-depth: 1
       - name: Add comment with workflow run link
         run: |
+          git --version
           COMMENT_BODY="The workflow run can be found at $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-          COMMIT_ID=git log -1 --pretty=format:"%H"
+          # COMMIT_ID=git log -1 --pretty=format:"%H"
           echo "$COMMENT_BODY" > comment.txt
           cat comment.txt
-          curl -d '{"body":"'"$COMMENT_BODY"'", "commit_id": "'"$COMMIT_ID"'"}' -H "Content-Type: application/json" -H "Authorization: Bearer ${{github.token}}" -X POST "${{github.event.issue.pull_request.url}}/comments"
+          curl -d '{"body":"'"$COMMENT_BODY"'", "commit_id": '123123123123'}' -H "Content-Type: application/json" -H "Authorization: Bearer ${{github.token}}" -X POST "${{github.event.issue.pull_request.url}}/comments"
         env:
           GITHUB_SERVER_URL: ${{ github.server_url }}
           GITHUB_REPOSITORY: ${{ github.repository }}
