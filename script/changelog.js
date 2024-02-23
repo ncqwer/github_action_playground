@@ -7,6 +7,7 @@ const { isPackageExist } = require('./utils/isPackageExist');
 const { genChangeLog, taskURL } = require('./utils/genChangeLog');
 const { getBranchInfo } = require('./utils/getBranchInfo');
 const { tryAmendCommit } = require('./utils/tryAmendCommit');
+const { execCommand } = require('./utils/execCommand');
 
 const main = async () => {
   const isCI = process.argv[2] === 'from-ci';
@@ -76,6 +77,9 @@ const writeChangeLog = async (
     await updatePullRequest(ans);
   } else if (isComment) {
     tryAmendCommit(true);
+    await execCommand(`git push`);
+  } else {
+    tryAmendCommit();
   }
 };
 

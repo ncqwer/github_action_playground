@@ -6,7 +6,6 @@ const accessToken = process.env.GITHUB_TOKEN;
 module.exports.updatePullRequest = async (content) => {
   const body = {
     body: content, // 要更新的 Pull Request 描述
-    title: 'Updated pull request title', // 要更新的 Pull Request 标题
     // 其他可更新的字段...
   };
 
