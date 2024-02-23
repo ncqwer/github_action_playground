@@ -4,15 +4,16 @@ Associated Task: [#232342](https://projectmanage.netease-official.lcap.163yun.co
 
 ### ✨Features
 
+- [633244b](https://github.com/ncqwer/github_action_playground/commit/633244b567a45311f227ecb32b4862180e40b641) Thanks [ncqwer](https://github.com/ncqwer) ! - feat a
 - [2ef3b26](https://github.com/ncqwer/github_action_playground/commit/2ef3b26745555493206ae1e5e168d002fba3de95) Thanks [ncqwer](https://github.com/ncqwer) ! - feature
 
 ### 🐛Bug Fixes
 
-- [160dea4](https://github.com/ncqwer/github_action_playground/commit/160dea48e32bbcd287db8d75e736a47758076f04) Thanks [ncqwer](https://github.com/ncqwer) ! - fix
+- [19db44b](https://github.com/ncqwer/github_action_playground/commit/19db44b8e4d111e162a0ea9cd09018d9ade1e136) Thanks [ncqwer](https://github.com/ncqwer) ! - fix
 
 ### 🚨BREAKING CHANGES
 
-- [160dea4](https://github.com/ncqwer/github_action_playground/commit/160dea48e32bbcd287db8d75e736a47758076f04) Thanks [ncqwer](https://github.com/ncqwer) ! - hhhahsdf
+- [19db44b](https://github.com/ncqwer/github_action_playground/commit/19db44b8e4d111e162a0ea9cd09018d9ade1e136) Thanks [ncqwer](https://github.com/ncqwer) ! - hhhahsdf
 
 ## 0.0.2-aplha
 
