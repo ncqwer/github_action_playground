@@ -34,15 +34,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token}}
 
-      # - name: Setup Nodejs
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     cache: 'yarn'
-      #     node-version: 16
+      - name: Setup Nodejs
+        uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+          node-version: 16
 
-      # - name: Install yarn
-      #   run: npm install -g yarn@v1
+      - name: Install yarn
+        run: npm install -g yarn@v1
 
-      # - name: Install Dep
-      #   run: |
-      #     yarn install --frozen-lockfile
+      - name: Install Dep
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: Update Pull Request
+        run: |
+          yarn changelog:comment
+        env:
+          GITHUB_TOKEN: ${{ github.token}}
+          PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}

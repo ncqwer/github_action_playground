@@ -1,9 +1,9 @@
 const { execCommand } = require('./execCommand');
 
-module.exports.tryAmendCommit = async () => {
+module.exports.tryAmendCommit = async (forceNew = false) => {
   const ans = await execCommand('git rev-list --count main..HEAD');
   const count = parseInt(ans.trim(), 10);
-  if (count > 0) {
+  if (!forceNew && count > 0) {
     await execCommand('git add . && git commit -q --amend --no-edit');
   } else {
     await execCommand(

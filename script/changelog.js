@@ -9,13 +9,19 @@ const { getBranchInfo } = require('./utils/getBranchInfo');
 const { tryAmendCommit } = require('./utils/tryAmendCommit');
 
 const main = async () => {
-  const isCI = process.argv[2] === 'ci';
+  const isCI = process.argv[2] === 'from-ci';
+  const isComment = process.argv[2] === 'from-comment';
   const [branchName, taskID] = await getBranchInfo();
   const commitInfo = await collectCommitInfo(branchName);
-  await writeChangeLog(commitInfo, taskID, isCI);
+  await writeChangeLog(commitInfo, taskID, isCI, isComment);
 };
 
-const writeChangeLog = async (info, taskID, isCI = false) => {
+const writeChangeLog = async (
+  info,
+  taskID,
+  isCI = false,
+  isComment = false,
+) => {
   const rawInfos = await Promise.all(
     Object.entries(info).map(async ([libraryName, libraryInfo]) => {
       const targetPackagesDir = await isPackageExist(libraryName);
@@ -68,8 +74,8 @@ const writeChangeLog = async (info, taskID, isCI = false) => {
   });
   if (isCI) {
     await updatePullRequest(ans);
-  } else {
-    tryAmendCommit();
+  } else if (isComment) {
+    tryAmendCommit(true);
   }
 };
 

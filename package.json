@@ -13,7 +13,8 @@
     "publish": "yarn lerna publish",
     "pkgadd": "node scripts/create.js",
     "changelog": "node script/changelog.js",
-    "changelog:ci": "node script/changelog.js ci"
+    "changelog:ci": "node script/changelog.js from-ci",
+    "changelog:comment": "node script/changelog.js from-comment"
   },
   "license": "MIT",
   "devDependencies": {
