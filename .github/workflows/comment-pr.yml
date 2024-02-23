@@ -31,7 +31,7 @@ jobs:
           # COMMIT_ID=git log -1 --pretty=format:"%H"
           echo "$COMMENT_BODY" > comment.txt
           cat comment.txt
-          curl -d '{"body":"'"$COMMENT_BODY"'", "commit_id": '123123123123'}' -H "Content-Type: application/json" -H "Authorization: Bearer ${{github.token}}" -X POST "${{github.event.issue.pull_request.url}}/comments"
+          curl -d '{"body":"'"$COMMENT_BODY"'", "commit_id": "'"123123123123"'"}' -H "Content-Type: application/json" -H "Authorization: Bearer ${{github.token}}" -X POST "${{github.event.issue.pull_request.url}}/comments"
         env:
           GITHUB_SERVER_URL: ${{ github.server_url }}
           GITHUB_REPOSITORY: ${{ github.repository }}
