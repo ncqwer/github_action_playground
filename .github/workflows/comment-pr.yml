@@ -14,8 +14,9 @@ jobs:
         id: branch_name
         run: |
           branch_name=$(echo $GITHUB_REF | cut -d'/' -f 3)
-					echo $branch_name
           echo "::set-output name=branch_name::${branch_name}"
+          echo $branch_name
+      # jecho hello
       - name: Checkout
         uses: actions/checkout/@v3
         with:
