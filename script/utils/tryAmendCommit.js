@@ -6,8 +6,9 @@ module.exports.tryAmendCommit = async (forceNew = false) => {
   if (!forceNew && count > 0) {
     await execCommand('git add . && git commit -q --amend --no-edit');
   } else {
-    await execCommand(
+    const ans = await execCommand(
       `git add . && git commit -q -m "doc: generate changelog by ci"`,
     );
+    console.log('githubbot commit:\n', ans);
   }
 };
