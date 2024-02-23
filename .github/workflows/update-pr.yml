@@ -2,7 +2,12 @@
 name: PULL REQUEST
 
 # 执行 CI 的时机: 当 git push 到 feature-* 分支时
-on: pull-request
+on:
+  pull_request:
+    branches: main
+
+permissions:
+  pull-requests: write
 
 jobs:
   build:
@@ -28,6 +33,8 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
+          git checkout -b main origin/main
+          git checkout '${{github.event.pull_request.head.ref}}'
         env:
           GITHUB_TOKEN: ${{ github.token}}
 

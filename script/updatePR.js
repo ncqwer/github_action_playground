@@ -28,11 +28,12 @@ module.exports.updatePullRequest = async (content) => {
       console.log(e);
     });
 
-  if (response.ok) {
-    console.log('Pull request updated successfully');
-  } else {
-    console.error('Failed to update pull request');
-  }
+  console.log(JSON.stringify(response));
+  // if (response.ok) {
+  //   console.log('Pull request updated successfully');
+  // } else {
+  //   console.error('Failed to update pull request');
+  // }
 };
 
 // updatePullRequest();

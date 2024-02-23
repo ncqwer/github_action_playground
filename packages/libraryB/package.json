@@ -1,6 +1,6 @@
 {
   "name": "mono-example",
-  "version": "0.0.1",
+  "version": "0.0.2-aplha",
   "private": true,
   "workspaces": [
     "packages/*",
@@ -12,9 +12,7 @@
     "build": "lerna run build --ignore doc",
     "dev": "cd playground && yarn dev",
     "publish": "yarn lerna publish",
-    "pkgadd": "node scripts/create.js",
-    "changelog": "node script/changelog.js",
-    "changelog:ci": "node script/changelog.js ci"
+    "pkgadd": "node scripts/create.js"
   },
   "license": "MIT",
   "devDependencies": {
@@ -35,7 +33,6 @@
     "lerna": "^5.4.3",
     "lodash.merge": "^4.6.2",
     "lodash.mergewith": "^4.6.2",
-    "node-fetch": "2",
     "postcss": "^8.4.16",
     "postcss-cli": "^10.0.0",
     "prettier": "^2.7.1",
