@@ -42,6 +42,11 @@ const writeChangeLog = async (
       )}](${taskURL}${taskID})\n\n`;
       ans += genChangeLog(libraryInfo, taskID);
       const currentAdded = ans;
+      console.log('🚀 ~ file: changelog.js:67 ~ Object.entries ~ isCI:', isCI);
+      console.log(
+        '🚀 ~ file: changelog.js:67 ~ Object.entries ~ isComment:',
+        isComment,
+      );
       if (isCI) return [libraryName, currentAdded];
       let content = '';
       try {
@@ -61,6 +66,7 @@ const writeChangeLog = async (
       } else {
         ans += content;
       }
+      console.log(ans);
       await fsp.writeFile(changelogFile, ans, 'utf-8');
       return [libraryName, currentAdded];
     }),
