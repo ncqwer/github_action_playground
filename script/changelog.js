@@ -83,7 +83,7 @@ const writeChangeLog = async (
     await updatePullRequest(ans);
   } else if (isComment) {
     await tryAmendCommit(true);
-    await execCommand(`git push`);
+    await execCommand(`git pull && git push`);
   } else {
     await tryAmendCommit();
   }
