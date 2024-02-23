@@ -29,9 +29,8 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
-          git checkout -b main origin/main
           branch_name=$(curl -s -H "Authorization: token ${{ github.token }}" ${{github.event.issue.pull_request.url}} | jq -r '.head.ref')
-          git checkout -b $branch_name
+          git checkout -b $branch_name origin/$branch_name
         env:
           GITHUB_TOKEN: ${{ github.token}}
 
