@@ -24,7 +24,9 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
-          git fetch origin main:main
+          current_branch=$(git rev-parse --abbrev-ref HEAD)
+          git checkout -b main origin/main
+          git checkout $current_branch
         env:
           GITHUB_TOKEN: ${{ github.token}}
 
