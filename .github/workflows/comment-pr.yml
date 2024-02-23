@@ -4,6 +4,9 @@ on:
   issue_comment:
     types: [created]
 
+permissions:
+  pull-requests: write
+
 jobs:
   generate-commit:
     # if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/generate-commit')
@@ -14,7 +17,8 @@ jobs:
       - name: Get branch name
         id: branch_name
         run: |
-          echo ${{github.event.issue.pull_request.url}}
+          branch_name=$(curl -s -H "Authorization: token ${{ github.token }}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }} | jq -r '.head.ref')
+          echo $branch_name
       # - name: Checkout
       #   uses: actions/checkout/@v3
       #   with:
