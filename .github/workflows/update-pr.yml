@@ -26,7 +26,7 @@ jobs:
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
           current_branch=$(git rev-parse --abbrev-ref HEAD)
           git checkout -b main origin/main
-          git checkout $current_branch
+          git checkout -b $current_branch
         env:
           GITHUB_TOKEN: ${{ github.token}}
 
