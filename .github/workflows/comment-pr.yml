@@ -14,24 +14,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get branch name
-        id: branch_name
-        run: |
-          branch_name=$(curl -s -H "Authorization: token ${{ github.token }}" ${{github.event.issue.pull_request.url}} | jq -r '.head.ref')
-          echo $branch_name
-      # - name: Checkout
-      #   uses: actions/checkout/@v3
-      #   with:
-      #     fetch-depth: 0
-
-      # - name: Git Identity
+      # - name: Get branch name
+      #   id: branch_name
       #   run: |
-      #     git config --global user.name 'github-actions[bot]'
-      #     git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-      #     git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
-      #     git checkout -b main origin/main
-      #   env:
-      #     GITHUB_TOKEN: ${{ github.token}}
+      #     branch_name=$(curl -s -H "Authorization: token ${{ github.token }}" ${{github.event.issue.pull_request.url}} | jq -r '.head.ref')
+      #     echo $branch_name
+      - name: Checkout
+        uses: actions/checkout/@v3
+        with:
+          fetch-depth: 0
+
+      - name: Git Identity
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
+          git checkout -b main origin/main
+          branch_name=$(curl -s -H "Authorization: token ${{ github.token }}" ${{github.event.issue.pull_request.url}} | jq -r '.head.ref')
+          git checkout -b $branch_name
+        env:
+          GITHUB_TOKEN: ${{ github.token}}
 
       # - name: Setup Nodejs
       #   uses: actions/setup-node@v3
