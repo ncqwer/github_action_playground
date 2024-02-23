@@ -35,32 +35,32 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_RUN_ID: ${{ github.run_id }}
 
-      # - name: Git Identity
-      #   run: |
-      #     git config --global user.name 'github-actions[bot]'
-      #     git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-      #     git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
-      #     branch_name=$(curl -s -H "Authorization: token ${{ github.token }}" ${{github.event.issue.pull_request.url}} | jq -r '.head.ref')
-      #     git checkout -b $branch_name origin/$branch_name
-      #   env:
-      #     GITHUB_TOKEN: ${{ github.token}}
+      - name: Git Identity
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
+          branch_name=$(curl -s -H "Authorization: token ${{ github.token }}" ${{github.event.issue.pull_request.url}} | jq -r '.head.ref')
+          git checkout -b $branch_name origin/$branch_name
+        env:
+          GITHUB_TOKEN: ${{ github.token}}
 
-      # - name: Setup Nodejs
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     cache: 'yarn'
-      #     node-version: 16
+      - name: Setup Nodejs
+        uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+          node-version: 16
 
-      # - name: Install yarn
-      #   run: npm install -g yarn@v1
+      - name: Install yarn
+        run: npm install -g yarn@v1
 
-      # - name: Install Dep
-      #   run: |
-      #     yarn install --frozen-lockfile
+      - name: Install Dep
+        run: |
+          yarn install --frozen-lockfile
 
-      # - name: Update Pull Request
-      #   run: |
-      #     yarn changelog:comment
-      #   env:
-      #     GITHUB_TOKEN: ${{ github.token}}
-      #     PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
+      - name: Update Pull Request
+        run: |
+          yarn changelog:comment
+        env:
+          GITHUB_TOKEN: ${{ github.token}}
+          PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
