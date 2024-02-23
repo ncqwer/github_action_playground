@@ -4,8 +4,6 @@ Associated Task: [#265233](https://projectmanage.netease-official.lcap.163yun.co
 
 ### ✨Features
 
-Associated Task: [#265233](https://projectmanage.netease-official.lcap.163yun.com/dashboard/TaskDetail?id=26523324-hanshijie)
-
 - [0719f3b](https://github.com/ncqwer/github_action_playground/commit/0719f3b2039b7dc80ee3a5593f5c02154b8701aa) Thanks [ncqwer](https://github.com/ncqwer) ! - 删去多余依赖
 
 ## 0.0.2-aplha

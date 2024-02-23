@@ -6,6 +6,7 @@ const { collectCommitInfo } = require('./utils/collectCommitInfo');
 const { isPackageExist } = require('./utils/isPackageExist');
 const { genChangeLog, taskURL } = require('./utils/genChangeLog');
 const { getBranchInfo } = require('./utils/getBranchInfo');
+const { tryAmendCommit } = require('./utils/tryAmendCommit');
 
 const main = async () => {
   const isCI = process.argv[2] === 'ci';
@@ -65,7 +66,11 @@ const writeChangeLog = async (info, taskID, isCI = false) => {
     ans += content;
     ans += '\n\n';
   });
-  if (isCI) await updatePullRequest(ans);
+  if (isCI) {
+    await updatePullRequest(ans);
+  } else {
+    tryAmendCommit();
+  }
 };
 
 main().catch((e) => {
