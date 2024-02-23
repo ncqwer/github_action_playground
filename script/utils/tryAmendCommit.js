@@ -1,0 +1,13 @@
+const { execCommand } = require('./execCommand');
+
+module.exports.tryAmendCommit = async () => {
+  const ans = await execCommand('git rev-list --count main..HEAD');
+  const count = parseInt(ans.trim(), 10);
+  if (count > 0) {
+    await execCommand('git add . && git commit -q --amend --no-edit');
+  } else {
+    await execCommand(
+      `git add . && git commit -q -m "doc: generate changelog by ci"`,
+    );
+  }
+};
