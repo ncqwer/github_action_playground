@@ -6,6 +6,10 @@ Associated Task: [#234234](https://projectmanage.netease-official.lcap.163yun.co
 
 - [5710bdf](https://github.com/ncqwer/github_action_playground/commit/5710bdf41067548cdf43d92e68ea18524e9199f1) Thanks [ncqwer](https://github.com/ncqwer) ! - hahah
 
+### 🐛Bug Fixes
+
+- [f0a5552](https://github.com/ncqwer/github_action_playground/commit/f0a5552589a3074080c8ebbb4bbebdbc1a1f019a) Thanks [ncqwer](https://github.com/ncqwer) ! - haksdfs
+
 ## 0.0.2-aplha
 
 Associated Task: [#265233](https://projectmanage.netease-official.lcap.163yun.com/dashboard/TaskDetail?id=26523324-hanshijie)
