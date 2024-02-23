@@ -82,10 +82,10 @@ const writeChangeLog = async (
   if (isCI) {
     await updatePullRequest(ans);
   } else if (isComment) {
-    tryAmendCommit(true);
+    await tryAmendCommit(true);
     await execCommand(`git push`);
   } else {
-    tryAmendCommit();
+    await tryAmendCommit();
   }
 };
 
