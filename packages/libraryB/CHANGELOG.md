@@ -4,6 +4,7 @@ Associated Task: [#234234](https://projectmanage.netease-official.lcap.163yun.co
 
 ### ✨Features
 
+- [d7c8bd1](https://github.com/ncqwer/github_action_playground/commit/d7c8bd1bfdff78283bd649655347cca6728f0013) Thanks [ncqwer](https://github.com/ncqwer) ! - the end task
 - [5710bdf](https://github.com/ncqwer/github_action_playground/commit/5710bdf41067548cdf43d92e68ea18524e9199f1) Thanks [ncqwer](https://github.com/ncqwer) ! - hahah
 
 ### 🐛Bug Fixes
