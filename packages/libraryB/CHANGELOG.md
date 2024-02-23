@@ -1,16 +1,12 @@
 ## 0.0.3-aplha
 
-Associated Task: [#234234](https://projectmanage.netease-official.lcap.163yun.com/dashboard/TaskDetail?id=234234324-hanshijie)
+Associated Task: [#234324](https://projectmanage.netease-official.lcap.163yun.com/dashboard/TaskDetail?id=234324)
 
 ### ✨Features
 
-- [8980dc0](https://github.com/ncqwer/github_action_playground/commit/8980dc07864d1f70ae02a0a6f2e4253cdc6aeec3) Thanks [ncqwer](https://github.com/ncqwer) ! - 32323
-- [d47bc17](https://github.com/ncqwer/github_action_playground/commit/d47bc178ceb9432e159521e0ddb8dcf884087c39) Thanks [ncqwer](https://github.com/ncqwer) ! - new date
-- [0219735](https://github.com/ncqwer/github_action_playground/commit/0219735cd33c2951d25ffab28e426b03416ad739) Thanks [ncqwer](https://github.com/ncqwer) ! - 323234
-
-### 🐛Bug Fixes
-
-- [97684f8](https://github.com/ncqwer/github_action_playground/commit/97684f8af752ef0dbc68b111e41ec62d70909a75) Thanks [ncqwer](https://github.com/ncqwer) ! - hhh
+- [91a9c61](https://github.com/ncqwer/github_action_playground/commit/91a9c6118f0a4763f31d296af1bb9519e1b18de2) Thanks [ncqwer](https://github.com/ncqwer) ! - errororororo
+- [6467e8c](https://github.com/ncqwer/github_action_playground/commit/6467e8c066a3903dc31a38271e339f76d750ac33) Thanks [ncqwer](https://github.com/ncqwer) ! - what
+- [6800842](https://github.com/ncqwer/github_action_playground/commit/6800842bbdd47d4822894d347b788720739cf842) Thanks [ncqwer](https://github.com/ncqwer) ! - what
 
 ## 0.0.2-aplha
 
