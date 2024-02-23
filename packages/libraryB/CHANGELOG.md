@@ -4,7 +4,9 @@ Associated Task: [#234324](https://projectmanage.netease-official.lcap.163yun.co
 
 ### ✨Features
 
-- [5e76d01](https://github.com/ncqwer/github_action_playground/commit/5e76d01a594ec1ba7e296b0533317becbc32a3d2) Thanks [ncqwer](https://github.com/ncqwer) ! - what
+- [91a9c61](https://github.com/ncqwer/github_action_playground/commit/91a9c6118f0a4763f31d296af1bb9519e1b18de2) Thanks [ncqwer](https://github.com/ncqwer) ! - errororororo
+- [6467e8c](https://github.com/ncqwer/github_action_playground/commit/6467e8c066a3903dc31a38271e339f76d750ac33) Thanks [ncqwer](https://github.com/ncqwer) ! - what
+- [6800842](https://github.com/ncqwer/github_action_playground/commit/6800842bbdd47d4822894d347b788720739cf842) Thanks [ncqwer](https://github.com/ncqwer) ! - what
 
 ## 0.0.2-aplha
 
