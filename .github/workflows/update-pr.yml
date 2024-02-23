@@ -14,15 +14,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check if commit is from CI
-        run: |
-          if [[ "${{ github.event.head_commit.committer.username }}" == "github-actions[bot]" ]]; then
-            echo "Commit is from CI, skipping the build..."
-            exit 78
-          else
-            echo "Commit is not from CI, continuing with the build..."
-          fi
-
       - name: Checkout
         uses: actions/checkout/@v3
         with:
@@ -33,8 +24,7 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
-          git checkout -b main origin/main
-          git checkout '${{github.event.pull_request.head.ref}}'
+          git fetch origin main:main
         env:
           GITHUB_TOKEN: ${{ github.token}}
 
