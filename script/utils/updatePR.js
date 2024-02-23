@@ -25,15 +25,10 @@ module.exports.updatePullRequest = async (content) => {
   )
     .then((res) => res.json())
     .catch((e) => {
+      // eslint-disable-next-line no-console
       console.log(e);
     });
 
-  console.log(JSON.stringify(response));
-  // if (response.ok) {
-  //   console.log('Pull request updated successfully');
-  // } else {
-  //   console.error('Failed to update pull request');
-  // }
+  // eslint-disable-next-line no-console
+  console.log(response.message);
 };
-
-// updatePullRequest();

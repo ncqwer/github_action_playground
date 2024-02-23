@@ -1,8 +1,5 @@
 {
-  "extends": [
-    "plugin:import/typescript",
-    "prettier"
-  ],
+  "extends": ["plugin:import/typescript", "prettier"],
   "plugins": ["@typescript-eslint", "import", "react", "prettier"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -81,7 +78,7 @@
     "no-useless-constructor": "error",
     "no-useless-rename": "error",
     // "no-unused-vars": "error", conflict with importing type alias
-    "no-unused-vars":"error",
+    "no-unused-vars": "error",
     "no-var": "error",
     "no-void": "error",
     "no-with": "error",
@@ -100,6 +97,7 @@
     "react/jsx-no-duplicate-props": "error",
     "react/jsx-no-target-blank": "error",
     "react/jsx-no-undef": "error",
+    "no-undef": "error",
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
     "react/jsx-wrap-multilines": "error",
