@@ -20,7 +20,7 @@ jobs:
           COMMENT_BODY="The workflow run can be found at $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           echo "$COMMENT_BODY" > comment.txt
           cat comment.txt
-          curl -d '{"body":"'"$COMMENT_BODY"'"}' -H "Content-Type: application/json" -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" -X POST "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$GITHUB_ISSUE_NUMBER/comments"
+          curl -d '{"body":"'"$COMMENT_BODY"'"}' -H "Content-Type: application/json" -H "Authorization: Bearer ${{github.token}}" -X POST "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$GITHUB_ISSUE_NUMBER/comments"
         env:
           GITHUB_SERVER_URL: ${{ github.server_url }}
           GITHUB_REPOSITORY: ${{ github.repository }}
