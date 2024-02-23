@@ -14,4 +14,4 @@ const tryAmendCommit = async (forceNew = false) => {
   }
 };
 
-tryAmendCommit().catch((e) => console.error(e));
+tryAmendCommit(true).catch((e) => console.error(e));
