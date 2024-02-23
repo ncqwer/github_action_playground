@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout/@v3
         with:
-          fetch-depth: 1
+          fetch-depth: 0
       - name: Add comment with workflow run link
         run: |
           COMMENT_BODY="The workflow run can be found at $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
