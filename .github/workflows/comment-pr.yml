@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Add comment with workflow run link
         run: |
-          echo ${{fromJson(github.event.comment).issue.number}}
+          echo '${{fromJson(github.event.comment).issue.number}}'
           # COMMENT_BODY="The workflow run can be found at $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           # echo "$COMMENT_BODY" > comment.txt
           # cat comment.txt
