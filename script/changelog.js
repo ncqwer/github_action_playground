@@ -89,6 +89,7 @@ const writeChangeLog = async (
   }
 };
 
+throw new Error('manualy error');
 main().catch((e) => {
   // eslint-disable-next-line no-console
   console.error(e.message);
