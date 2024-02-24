@@ -4,11 +4,13 @@ Associated Task: [#234234](https://projectmanage.netease-official.lcap.163yun.co
 
 ### ✨Features
 
+- [8c8d4ea](https://github.com/ncqwer/github_action_playground/commit/8c8d4eaf1f952096b39acc71b08413bc0548c796) Thanks [“ncqwer”](https://github.com/“ncqwer”) ! - protected rule
 - [d7c8bd1](https://github.com/ncqwer/github_action_playground/commit/d7c8bd1bfdff78283bd649655347cca6728f0013) Thanks [ncqwer](https://github.com/ncqwer) ! - the end task
 - [5710bdf](https://github.com/ncqwer/github_action_playground/commit/5710bdf41067548cdf43d92e68ea18524e9199f1) Thanks [ncqwer](https://github.com/ncqwer) ! - hahah
 
 ### 🐛Bug Fixes
 
+- [0870c54](https://github.com/ncqwer/github_action_playground/commit/0870c542329913e651895a3dc91bfb393efb55b8) Thanks [“ncqwer”](https://github.com/“ncqwer”) ! - no check?
 - [f0a5552](https://github.com/ncqwer/github_action_playground/commit/f0a5552589a3074080c8ebbb4bbebdbc1a1f019a) Thanks [ncqwer](https://github.com/ncqwer) ! - haksdfs
 
 ## 0.0.2-aplha
