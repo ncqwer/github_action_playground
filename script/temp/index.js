@@ -156,7 +156,6 @@ const main = async () => {
   );
   await processPackagesErrors(getErroredPackages());
 
-  await 
 };
 
 main();
