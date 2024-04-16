@@ -90,5 +90,15 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: my-artifact
-          path: dist/ # or path/to/artifact
+          name: dist
+          path: dist/
+
+      - name: Notify
+        run: |
+          yarn successPR
+        env:
+          GITHUB_TOKEN: ${{ github.token}}
+          PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
+          BRANCH_NAME: ${{github.ref}}
+          GITHUB_REPOSITORY: ${{github.repository}}
+          ACTION_ID: ${{github.run_id}}
