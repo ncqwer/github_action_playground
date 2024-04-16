@@ -148,7 +148,7 @@ const main = async () => {
   );
   await processPackagesErrors(getErroredPackages());
 
-  await fsp.mkdir('dist');
+  // await fsp.mkdir('dist');
   // deploy
   await processPackageWithParallelFlag(
     deploy,
