@@ -60,6 +60,10 @@ jobs:
           cache: 'yarn'
           node-version: 16
 
+      - name: Install LCAP
+        run: |
+          npm install -g lcap@0.3.4
+          lcap config set platform https://defaulttenant.lcap.hadri.163yun.com
       - name: Install yarn
         run: npm install -g yarn@v1
 

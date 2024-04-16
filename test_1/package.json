@@ -47,5 +47,8 @@
   },
   "template": {
     "inited": true
+  },
+  "resolutions": {
+    "globby": "9.2.0"
   }
 }
