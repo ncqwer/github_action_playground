@@ -50,7 +50,7 @@ jobs:
       - name: see git
         run: |
           git branch --show-current
-          git diff --name-only origin/main...HEAD
+          git diff --name-only ${{github.event.pull_request.base.sha}}...HEAD
 
       # - name: Setup Nodejs
       #   uses: actions/setup-node@v3
