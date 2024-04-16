@@ -32,20 +32,25 @@ jobs:
           echo '${{github.ref}}'
           echo '${{github.ref_name}}'
           echo '${{github.repository}}'
-      # - name: Checkout
-      #   uses: actions/checkout/@v3
-      #   with:
-      #     fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout/@v3
+        with:
+          fetch-depth: 1
 
-      # - name: Git Identity
-      #   run: |
-      #     git config --global user.name 'github-actions[bot]'
-      #     git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-      #     git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
-      #     git checkout -b main origin/main
-      #     git checkout '${{github.event.pull_request.head.ref}}'
-      #   env:
-      #     GITHUB_TOKEN: ${{ github.token}}
+      - name: Git Identity
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
+          git checkout -b main origin/main
+          git checkout '${{github.event.pull_request.head.ref}}'
+        env:
+          GITHUB_TOKEN: ${{ github.token}}
+
+      - name: see git
+        run: |
+          git branch --show-current
+          git diff --name-only origin/main...HEAD
 
       # - name: Setup Nodejs
       #   uses: actions/setup-node@v3
