@@ -10,7 +10,7 @@ const ONLY_ONE_PACKAGE_PER_PR = process.env.ONLY_ONE_PACKAGE_PER_PR || 'false'; 
 const BRANCH_NAME =
   process.env.BRANCH_NAME || 'Task(libraryB)-23234234-hsj-234324';
 const GITHUB_REPOSITORY =
-  process.env.AUTO_ADJUST_RESOLUTION || 'ncqwer/github_action_playground';
+  process.env.GITHUB_REPOSITORY || 'ncqwer/github_action_playground';
 const PULL_REQUEST_ID = process.env.PULL_REQUEST_ID || '9';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 

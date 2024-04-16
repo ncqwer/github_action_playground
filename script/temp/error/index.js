@@ -10,8 +10,8 @@ const {
 } = require('../env');
 
 const sendMessage = async (message) => {
-  await fsp.writeFile('test.md', message, 'utf-8');
-  return;
+  // await fsp.writeFile('test.md', message, 'utf-8');
+  // return;
   const url = `https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PULL_REQUEST_ID}/comments`;
   await fetch(url, {
     method: 'POST',
