@@ -66,6 +66,7 @@ const getFrontendPackage = async (packageRoot) => {
     return {
       cwd: path.resolve(packageRoot),
       packageInfo,
+      packageRoot,
       packageName,
       nextVersion,
       type: 'f',
@@ -84,6 +85,7 @@ const getBackendPackage = async (packageRoot) => {
     return {
       cwd: path.resolve(packageRoot),
       packageInfo,
+      packageRoot,
       packageName,
       nextVersion,
       type: 'f',

@@ -3,7 +3,8 @@ const normal_reg = /^(\S+?\/)/;
 
 const not_allowed = {
   'script/': true,
-  '.github': true,
+  '.github/': true,
+  'packages/': true,
 };
 
 const regs = [office_front_reg, normal_reg];

@@ -19,7 +19,7 @@ const {
 const { customCheck } = require('./customCheck');
 
 const getChangedFile = async () => {
-  const fileStr = await execCommand('git diff --name-only aaa...HEAD');
+  const fileStr = await execCommand('git diff --name-only origin/main...HEAD');
   return fileStr
     .split('\n')
     .map((v) => v.trim())
@@ -52,6 +52,7 @@ const createLibraryStore = () => {
     store.set(packageRoot, package);
     const info = await getPackage(packageRoot).catch((e) => {
       return {
+        packageRoot,
         error: e,
       };
     });
@@ -155,7 +156,6 @@ const main = async () => {
     DEPLOY_WITH_PARALLEL === 'true',
   );
   await processPackagesErrors(getErroredPackages());
-
 };
 
 main();

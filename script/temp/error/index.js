@@ -10,8 +10,8 @@ const {
 } = require('../env');
 
 const sendMessage = async (message) => {
-  // await fsp.writeFile('test.md', message, 'utf-8');
-  // return;
+  await fsp.writeFile('test.md', message, 'utf-8');
+  return;
   const url = `https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PULL_REQUEST_ID}/comments`;
   await fetch(url, {
     method: 'POST',
@@ -40,11 +40,13 @@ const exitWithMessage = async (message) => {
 const erroredPackagesToMsg = (packages) => {
   const str = packages.map(toError).join('\n\n');
   return str;
-  function toError({ error, packageName, cwd }) {
+  function toError({ error, packageName, packageRoot, cwd }) {
     const _errorMsg = error.message || `${error}`;
     const errorMsg = _errorMsg.split('\n').slice(-100).join('\n');
     const packgeRootURL = `https://github.com/${GITHUB_REPOSITORY}/tree/${BRANCH_NAME}/${cwd}`;
-    const msg = `[${packageName}](${packgeRootURL})存在错误：\n\`\`\`bash\n${errorMsg}\n\`\`\``;
+    const msg = `[${
+      packageName || packageRoot
+    }](${packgeRootURL})存在错误：\n\`\`\`bash\n${errorMsg}\n\`\`\``;
     return msg;
   }
 };
