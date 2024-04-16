@@ -79,7 +79,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token}}
           PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
-          BRANCH_NAME: ${{github.ref_name}}
+          BRANCH_NAME: ${{github.ref}}
           GITHUB_REPOSITORY: ${{github.repository}}
           ACTION_ID: ${{github.run_id}}
 
