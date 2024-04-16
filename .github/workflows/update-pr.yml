@@ -48,11 +48,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token}}
 
-      - name: see git
+      - name: see git1
         run: |
           git branch --show-current
-          git diff --name-only ${{github.event.pull_request.base.sha}}...HEAD
-
+      - name: see git2
+        run: |
+          git diff --name-only origin/main...HEAD
       # - name: Setup Nodejs
       #   uses: actions/setup-node@v3
       #   with:
