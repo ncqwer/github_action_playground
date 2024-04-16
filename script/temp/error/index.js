@@ -40,10 +40,10 @@ const exitWithMessage = async (message) => {
 const erroredPackagesToMsg = (packages) => {
   const str = packages.map(toError).join('\n\n');
   return str;
-  function toError({ error, packageName, packageRoot, cwd }) {
+  function toError({ error, packageName, packageRoot }) {
     const _errorMsg = error.message || `${error}`;
     const errorMsg = _errorMsg.split('\n').slice(-100).join('\n');
-    const packgeRootURL = `https://github.com/${GITHUB_REPOSITORY}/tree/${BRANCH_NAME}/${cwd}`;
+    const packgeRootURL = `https://github.com/${GITHUB_REPOSITORY}/tree/${BRANCH_NAME}/${packageRoot}`;
     const msg = `[${
       packageName || packageRoot
     }](${packgeRootURL})存在错误：\n\`\`\`bash\n${errorMsg}\n\`\`\``;

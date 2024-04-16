@@ -75,6 +75,11 @@ jobs:
 
       - name: Update Pull Request
         run: |
+          git config --global core.quotepath false          
+          git config --global gui.encoding utf-8            
+          git config --global i18n.commit.encoding utf-8    
+          git config --global i18n.logoutputencoding utf-8  
+          export LESSCHARSET=utf-8
           yarn checkPR
         env:
           GITHUB_TOKEN: ${{ github.token}}
