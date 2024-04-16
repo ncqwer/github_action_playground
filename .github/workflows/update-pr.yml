@@ -54,22 +54,25 @@ jobs:
       - name: see git2
         run: |
           git diff --name-only origin/main...HEAD
-      # - name: Setup Nodejs
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     cache: 'yarn'
-      #     node-version: 16
+      - name: Setup Nodejs
+        uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+          node-version: 16
 
-      # - name: Install yarn
-      #   run: npm install -g yarn@v1
+      - name: Install yarn
+        run: npm install -g yarn@v1
 
-      # - name: Install Dep
-      #   run: |
-      #     yarn install --frozen-lockfile
+      - name: Install Dep
+        run: |
+          yarn install --frozen-lockfile
 
-      # - name: Update Pull Request
-      #   run: |
-      #     yarn changelog:ci
-      #   env:
-      #     GITHUB_TOKEN: ${{ github.token}}
-      #     PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
+      - name: Update Pull Request
+        run: |
+          yarn checkPR
+        env:
+          GITHUB_TOKEN: ${{ github.token}}
+          PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
+          BRANCH_NAME: ${{github.ref_name}}
+          GITHUB_REPOSITORY: ${{github.repository}}
+          ACTION_ID: ${{github.run_id}}

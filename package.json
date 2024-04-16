@@ -12,7 +12,8 @@
     "changelog": "node script/changelog.js",
     "changelog:ci": "node script/changelog.js from-ci",
     "changelog:comment": "node script/changelog.js from-comment",
-    "checkPR": "node script/temp/index.js"
+    "checkPR": "node script/temp/index.js",
+    "successPR": "node script/temp/success.js"
   },
   "license": "MIT",
   "devDependencies": {
