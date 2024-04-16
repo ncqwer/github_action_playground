@@ -22,37 +22,47 @@ jobs:
           else
             echo "Commit is not from CI, continuing with the build..."
           fi
-      - name: Checkout
-        uses: actions/checkout/@v3
-        with:
-          fetch-depth: 0
-
-      - name: Git Identity
+      - name: see vars
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
-          git checkout -b main origin/main
-          git checkout '${{github.event.pull_request.head.ref}}'
-        env:
-          GITHUB_TOKEN: ${{ github.token}}
+          echo '${{github.event.pull_request.head.ref}}'
+          echo '${{github.event.pull_request.head.repo.branches_url}}'
+          echo '${{github.event.pull_request.base.ref}}'
+          echo '${{github.event.pull_request.base.repo.branches_url}}'
+          echo '${{github.head_ref}}'
+          echo '${{github.ref}}'
+          echo '${{github.ref_name}}'
+          echo '${{github.repository}}'
+      # - name: Checkout
+      #   uses: actions/checkout/@v3
+      #   with:
+      #     fetch-depth: 0
 
-      - name: Setup Nodejs
-        uses: actions/setup-node@v3
-        with:
-          cache: 'yarn'
-          node-version: 16
+      # - name: Git Identity
+      #   run: |
+      #     git config --global user.name 'github-actions[bot]'
+      #     git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      #     git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
+      #     git checkout -b main origin/main
+      #     git checkout '${{github.event.pull_request.head.ref}}'
+      #   env:
+      #     GITHUB_TOKEN: ${{ github.token}}
 
-      - name: Install yarn
-        run: npm install -g yarn@v1
+      # - name: Setup Nodejs
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     cache: 'yarn'
+      #     node-version: 16
 
-      - name: Install Dep
-        run: |
-          yarn install --frozen-lockfile
+      # - name: Install yarn
+      #   run: npm install -g yarn@v1
 
-      - name: Update Pull Request
-        run: |
-          yarn changelog:ci
-        env:
-          GITHUB_TOKEN: ${{ github.token}}
-          PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
+      # - name: Install Dep
+      #   run: |
+      #     yarn install --frozen-lockfile
+
+      # - name: Update Pull Request
+      #   run: |
+      #     yarn changelog:ci
+      #   env:
+      #     GITHUB_TOKEN: ${{ github.token}}
+      #     PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}

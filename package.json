@@ -2,9 +2,6 @@
   "name": "mono-example",
   "version": "0.0.1",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
   "description": "mono example",
   "scripts": {
     "devadd": "yarn add -D --ignore-workspace-root-check",
@@ -14,7 +11,8 @@
     "pkgadd": "node scripts/create.js",
     "changelog": "node script/changelog.js",
     "changelog:ci": "node script/changelog.js from-ci",
-    "changelog:comment": "node script/changelog.js from-comment"
+    "changelog:comment": "node script/changelog.js from-comment",
+    "checkPR": "node script/temp/index.js"
   },
   "license": "MIT",
   "devDependencies": {
@@ -25,7 +23,6 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.1",
-    "lerna": "^5.4.3",
     "lodash.mergewith": "^4.6.2",
     "node-fetch": "2",
     "prettier": "^2.7.1",
