@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const semver = require('semver');
+const { XMLParser } = require('fast-xml-parser');
 
 const { execCommand } = require('../utils/execCommand');
 
@@ -57,26 +58,28 @@ const readPackageJSON = async (filePath) => {
   }
 };
 
-const getFrontendPackage = async (packageRoot) => {
+const getBackendPackage = async (packageRoot) => {
   try {
-    const filePath = path.resolve(packageRoot, 'package.json');
-    const packageInfo = await readPackageJSON(filePath);
-    const packageName = packageInfo.name;
-    const nextVersion = await getNextVersion(packageName, packageInfo.version);
+    const filePath = path.resolve(packageRoot, 'pom.xml');
+    const fileContent = await fsp.readFile(filePath, 'utf-8');
+    const parser = new XMLParser();
+    const packageInfo = parser.parse(fileContent);
+    const packageName = packageInfo.project.artifactId;
+    const nextVersion = packageInfo.project.version;
     return {
       cwd: path.resolve(packageRoot),
       packageInfo,
       packageRoot,
       packageName,
       nextVersion,
-      type: 'f',
+      type: 'b',
     };
   } catch {
     return null;
   }
 };
 
-const getBackendPackage = async (packageRoot) => {
+const getFrontendPackage = async (packageRoot) => {
   try {
     const filePath = path.resolve(packageRoot, 'package.json');
     const packageInfo = await readPackageJSON(filePath);

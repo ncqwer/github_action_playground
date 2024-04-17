@@ -8,7 +8,6 @@ const FE_PREFERED_FILE = {
 };
 
 const BE_PREFERED_FILE = {
-  'package.xml': '缺少package.json',
   'src/**/*.java': '缺少java代码',
   'pom.xml': '缺少pom.xml',
   'README.md': '缺少README.md',

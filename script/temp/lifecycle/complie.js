@@ -31,8 +31,10 @@ const feBuild = async (package) => {
   });
 };
 
-const beBuild = async (package) => {
-  return feBuild(package);
+const beBuild = async ({ cwd }) => {
+  await execCommand('mvn clean package', {
+    cwd,
+  });
 };
 
 const complie = async (package) => {
