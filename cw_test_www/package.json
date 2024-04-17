@@ -45,6 +45,9 @@
     "tags": "./vetur/tags.json",
     "attributes": "./vetur/attributes.json"
   },
+  "resolutions": {
+    "globby": "9.2.0"
+  },
   "template": {
     "inited": true
   }
