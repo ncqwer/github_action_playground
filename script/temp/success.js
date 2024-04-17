@@ -3,7 +3,7 @@ const { sendMessage } = require('./error');
 
 const main = async () => {
   const url = `https://github.com/${GITHUB_REPOSITORY}/actions/runs/${ACTION_ID}`;
-  sendMessage(`[点击此处获得编译产物](${url})`);
+  await sendMessage(`[点击此处获得编译产物](${url})`);
 };
 
 main();
