@@ -48,32 +48,37 @@ jobs:
           echo '${{github.event.repository.full_name}}'
           echo '${{github.actor}}'
           echo '${{github.triggering_actor}}'
-      - name: Checkout
-        uses: actions/checkout/@v3
-        with:
-          fetch-depth: 1
+          if [ "${{secrets.TEST}}" = "test111" ]; then
+              echo "ok"
+          else
+              echo "no"
+          fi
+      # - name: Checkout
+      #   uses: actions/checkout/@v3
+      #   with:
+      #     fetch-depth: 1
 
-      - name: Git Identity
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
-          git fetch --unshallow
-        env:
-          GITHUB_TOKEN: ${{ github.token}}
+      # - name: Git Identity
+      #   run: |
+      #     git config --global user.name 'github-actions[bot]'
+      #     git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      #     git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
+      #     git fetch --unshallow
+      #   env:
+      #     GITHUB_TOKEN: ${{ github.token}}
 
-      - name: see git1
-        run: |
-          git branch --show-current
-      - name: see git2
-        run: |
-          git diff --name-only origin/main...HEAD
+      # - name: see git1
+      #   run: |
+      #     git branch --show-current
+      # - name: see git2
+      #   run: |
+      #     git diff --name-only origin/main...HEAD
 
-      - name: Setup Nodejs
-        uses: actions/setup-node@v3
-        with:
-          cache: 'npm'
-          node-version: 16
+      # - name: Setup Nodejs
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     cache: 'npm'
+      #     node-version: 16
 
       # - name: Set up JDK 8
       #   uses: actions/setup-java@v4
@@ -88,9 +93,9 @@ jobs:
       #     lcap config set username admin
       #     lcap config set password Admin@123456
 
-      - name: Install Dep
-        run: |
-          npm install
+      # - name: Install Dep
+      #   run: |
+      #     npm install
 
       # - name: Update Pull Request
       #   run: |
@@ -114,12 +119,12 @@ jobs:
       #     name: dist
       #     path: dist/
 
-      - name: Notify
-        run: |
-          npm run successPR
-        env:
-          GITHUB_TOKEN: ${{ github.token}}
-          PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
-          BRANCH_NAME: ${{github.ref}}
-          GITHUB_REPOSITORY: ${{github.repository}}
-          ACTION_ID: ${{github.run_id}}
+      # - name: Notify
+      #   run: |
+      #     npm run successPR
+      #   env:
+      #     GITHUB_TOKEN: ${{ github.token}}
+      #     PULL_REQUEST_ID: ${{ github.event.pull_event.number }}
+      #     BRANCH_NAME: ${{github.ref}}
+      #     GITHUB_REPOSITORY: ${{github.repository}}
+      #     ACTION_ID: ${{github.run_id}}
