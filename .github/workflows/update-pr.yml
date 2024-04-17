@@ -39,11 +39,12 @@ jobs:
           echo '${{github.repository}}'
           echo '${{ github.event.pull_request.number }}'
           echo '${{ github.run_id }}'
-          echo '${{github.event.pull_request.user.name}}''
+          echo '${{github.event.pull_request.user.name}}'
           echo '${{github.event.sender.name}}'
           echo '${{github.event.repository.fork}}'
           echo '${{github.event.repository.name}}'
           echo '${{github.event.repository.full_name}}'
+          echo '${{github}}'
       - name: Checkout
         uses: actions/checkout/@v3
         with:
