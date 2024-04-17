@@ -54,6 +54,10 @@ jobs:
       - name: see git2
         run: |
           git diff --name-only origin/main...HEAD
+
+      - name: Install yarn
+        run: curl -o- -L https://yarnpkg.com/install.sh | bash
+
       - name: Setup Nodejs
         uses: actions/setup-node@v3
         with:
@@ -72,8 +76,6 @@ jobs:
           lcap config set platform https://defaulttenant.lcap.hadri.163yun.com
           lcap config set username admin
           lcap config set password Admin@123456
-      - name: Install yarn
-        run: npm install -g yarn@v1
 
       - name: Install Dep
         run: |
