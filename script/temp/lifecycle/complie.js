@@ -22,7 +22,7 @@ const feBuild = async (package) => {
     'utf-8',
   );
 
-  await execCommands(['yarn', 'yarn build'], {
+  await execCommands(['yarn --force', 'yarn build'], {
     cwd,
   });
   await execCommand('yarn usage', {
