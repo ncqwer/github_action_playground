@@ -22,10 +22,10 @@ const feBuild = async (package) => {
     'utf-8',
   );
 
-  await execCommands(['yarn install --frozen-lockfile', 'yarn build'], {
+  await execCommands(['npm install', 'npm run build'], {
     cwd,
   });
-  await execCommand('yarn usage', {
+  await execCommand('npm run usage', {
     throwWhenStderr: false,
     cwd,
   });
