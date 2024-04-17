@@ -55,13 +55,10 @@ jobs:
         run: |
           git diff --name-only origin/main...HEAD
 
-      - name: Install yarn
-        run: curl -o- -L https://yarnpkg.com/install.sh | bash
-
       - name: Setup Nodejs
         uses: actions/setup-node@v3
         with:
-          cache: 'yarn'
+          cache: 'npm'
           node-version: 16
 
       - name: Set up JDK 8
@@ -79,7 +76,7 @@ jobs:
 
       - name: Install Dep
         run: |
-          yarn install --frozen-lockfile
+          npm install
 
       - name: Update Pull Request
         run: |
@@ -88,7 +85,7 @@ jobs:
           git config --global i18n.commit.encoding utf-8    
           git config --global i18n.logoutputencoding utf-8  
           export LESSCHARSET=utf-8
-          yarn checkPR
+          npm run checkPR
         env:
           GITHUB_TOKEN: ${{ github.token}}
           PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
@@ -103,7 +100,7 @@ jobs:
 
       - name: Notify
         run: |
-          yarn successPR
+          npm run successPR
         env:
           GITHUB_TOKEN: ${{ github.token}}
           PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
