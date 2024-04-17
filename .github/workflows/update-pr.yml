@@ -22,20 +22,41 @@ jobs:
           else
             echo "Commit is not from CI, continuing with the build..."
           fi
+      - name: see vars
+        run: |
+          echo '${{github.event.pull_request.head.ref}}'
+          echo '${{github.event.pull_request.head.sha}}'
+          echo '${{github.event.pull_request.head.repo.branches_url}}'
+          echo '${{github.event.pull_request.base.ref}}'
+          echo '${{github.event.pull_request.base.sha}}'
+          echo '${{github.event.pull_request.base.repo.branches_url}}'
+          echo '${{github.head_ref}}'
+          echo '${{github.ref}}'
+          echo '${{github.ref_name}}'
+          echo '${{github.repository}}'
       - name: Checkout
         uses: actions/checkout/@v3
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Git Identity
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
-          git checkout -b main origin/main
-          git checkout '${{github.event.pull_request.head.ref}}'
+          git fetch --unshallow
         env:
           GITHUB_TOKEN: ${{ github.token}}
+
+      - name: see git1
+        run: |
+          git branch --show-current
+      - name: see git2
+        run: |
+          git diff --name-only origin/main...HEAD
+
+      - name: Install yarn
+        run: curl -o- -L https://yarnpkg.com/install.sh | bash
 
       - name: Setup Nodejs
         uses: actions/setup-node@v3
@@ -43,8 +64,18 @@ jobs:
           cache: 'yarn'
           node-version: 16
 
-      - name: Install yarn
-        run: npm install -g yarn@v1
+      - name: Set up JDK 8
+        uses: actions/setup-java@v4
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+
+      - name: Install LCAP
+        run: |
+          npm install -g lcap@0.3.4
+          lcap config set platform https://defaulttenant.lcap.hadri.163yun.com
+          lcap config set username admin
+          lcap config set password Admin@123456
 
       - name: Install Dep
         run: |
@@ -52,7 +83,30 @@ jobs:
 
       - name: Update Pull Request
         run: |
-          yarn changelog:ci
+          git config --global core.quotepath false          
+          git config --global gui.encoding utf-8            
+          git config --global i18n.commit.encoding utf-8    
+          git config --global i18n.logoutputencoding utf-8  
+          export LESSCHARSET=utf-8
+          yarn checkPR
         env:
           GITHUB_TOKEN: ${{ github.token}}
-          PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
+          PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
+          BRANCH_NAME: ${{github.ref}}
+          GITHUB_REPOSITORY: ${{github.repository}}
+          ACTION_ID: ${{github.run_id}}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Notify
+        run: |
+          yarn successPR
+        env:
+          GITHUB_TOKEN: ${{ github.token}}
+          PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
+          BRANCH_NAME: ${{github.ref}}
+          GITHUB_REPOSITORY: ${{github.repository}}
+          ACTION_ID: ${{github.run_id}}

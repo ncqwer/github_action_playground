@@ -9,6 +9,7 @@ lib/
 node_modules/
 site/out/
 tmp/
+test.md
 test.result.json
 coverage
 
@@ -24,3 +25,8 @@ playground/node_modules
 
 my.secrets
 .DS_Store
+
+**/dist-theme/
+**/*.zip
+
+**/target/

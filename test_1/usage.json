@@ -1,0 +1,64 @@
+{
+    "name": "test_1",
+    "title": "test1",
+    "description": "",
+    "specVersion": "1.0.0",
+    "type": "module",
+    "subType": "extension",
+    "version": "0.1.0",
+    "frontends": [
+        {
+            "concept": "FrontendLibrary",
+            "name": "pc",
+            "type": "pc",
+            "viewComponents": [
+                {
+                    "concept": "ViewComponent",
+                    "name": "asdfasdf",
+                    "title": "asdfas",
+                    "category": "test_1(test1)",
+                    "blocks": [
+                        {
+                            "title": "基本用法",
+                            "description": "",
+                            "code": "<template>\n<asdfasdf></asdfasdf>\n</template>"
+                        }
+                    ],
+                    "attrs": [
+                        {
+                            "name": "value",
+                            "type": "string",
+                            "default": "请在这里编写代码",
+                            "description": "需要传入的值"
+                        }
+                    ]
+                }
+            ],
+            "logics": []
+        }
+    ],
+    "summary": {
+        "name": "test_1",
+        "title": "test1",
+        "version": "0.1.0",
+        "description": "",
+        "frontends": [
+            {
+                "type": "pc",
+                "viewComponents": [
+                    {
+                        "name": "asdfasdf",
+                        "title": "asdfas"
+                    }
+                ],
+                "logics": []
+            }
+        ]
+    },
+    "compilerInfoMap": {
+        "js": {
+            "prefix": "extension"
+        }
+    },
+    "ideVersion": "3.2"
+}
