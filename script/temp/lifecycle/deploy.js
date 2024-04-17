@@ -24,8 +24,3 @@ const deploy = async ({ cwd, packageName }) => {
 module.exports = {
   deploy,
 };
-
-deploy({
-  packageName: 'aaa',
-  cwd: '/Users/hanshijie/myproject/git_try/test_1',
-});
