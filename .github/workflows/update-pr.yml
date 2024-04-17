@@ -28,9 +28,11 @@ jobs:
           echo '${{github.event.pull_request.head.ref}}'
           echo '${{github.event.pull_request.head.sha}}'
           echo '${{github.event.pull_request.head.repo.branches_url}}'
+          echo '${{github.event.pull_request.head.repo.full_name}}'
           echo '${{github.event.pull_request.base.ref}}'
           echo '${{github.event.pull_request.base.sha}}'
           echo '${{github.event.pull_request.base.repo.branches_url}}'
+          echo '${{github.event.pull_request.base.repo.full_name}}'
           echo '${{github.head_ref}}'
           echo '${{github.ref}}'
           echo '${{github.ref_name}}'
@@ -38,10 +40,11 @@ jobs:
           echo '${{ github.event.pull_request.number }}'
           echo '${{ github.run_id }}'
           echo '${{github.event.pull_request.user.name}}''
+          echo '${{github.event.sender.name}}'
           echo '${{github.event.repository.fork}}'
           echo '${{github.event.repository.name}}'
           echo '${{github.event.repository.full_name}}'
-          echo '${{toJson(github)}}'
+          echo ${{toJson(github)}} | cat
       - name: Checkout
         uses: actions/checkout/@v3
         with:
