@@ -153,6 +153,12 @@ jobs:
           npm run successPR
         env:
           ARTIFACT_ID: ${{steps.upload_assets.outputs.artifact-id}}
+          GITHUB_TOKEN: ${{ github.token}}
+          PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
+          HEAD_BRANCH_NAME: ${{github.head_ref}}
+          HEAD_REPOSITORY: ${{github.event.pull_request.head.repo.full_name}}
+          GITHUB_REPOSITORY: ${{github.repository}}
+          ACTION_ID: ${{github.run_id}}
 
       - name: Upload PR Result Error
         uses: actions/upload-artifact@v4
