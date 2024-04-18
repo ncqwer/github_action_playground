@@ -5,7 +5,6 @@
 <script>
 export default {
   name: 'asdfasdf',
-  asdfds
   props: {
     value: {
       type: String,
