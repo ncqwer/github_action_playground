@@ -13,7 +13,7 @@ const sendMessage = async (message) => {
   // await fsp.writeFile('test.md', message, 'utf-8');
   // return;
   const url = `https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PULL_REQUEST_ID}/comments`;
-  return await fetch(url, {
+  await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

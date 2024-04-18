@@ -8,7 +8,6 @@ on:
 
 permissions:
   pull-requests: write
-  issues: write
 
 jobs:
   build:
@@ -28,119 +27,85 @@ jobs:
           echo '${{github.event.pull_request.head.ref}}'
           echo '${{github.event.pull_request.head.sha}}'
           echo '${{github.event.pull_request.head.repo.branches_url}}'
-          echo '${{github.event.pull_request.head.repo.full_name}}'
           echo '${{github.event.pull_request.base.ref}}'
           echo '${{github.event.pull_request.base.sha}}'
           echo '${{github.event.pull_request.base.repo.branches_url}}'
-          echo '${{github.event.pull_request.base.repo.full_name}}'
           echo '${{github.head_ref}}'
           echo '${{github.ref}}'
           echo '${{github.ref_name}}'
           echo '${{github.repository}}'
-          echo '${{ github.event.pull_request.number }}'
-          echo '${{ github.run_id }}'
-          echo '${{github.event.pull_request.user.name}}'
-          echo '${{github.event.pull_request.maintainer_can_modify}}'
-          echo '${{github.event.pull_request.user.id}}'
-          echo '${{github.event.sender.id}}'
-          echo '${{github.event.repository.fork}}'
-          echo '${{github.event.repository.name}}'
-          echo '${{github.event.repository.full_name}}'
-          echo '${{github.actor}}'
-          echo '${{github.triggering_actor}}'
-          exit 1
-          if [ "${{secrets.TEST}}" = "test111" ]; then
-              echo "ok"
-          else
-              echo "no"
-          fi
-      - name: mock action message
+      - name: Checkout
+        uses: actions/checkout/@v3
+        with:
+          fetch-depth: 1
+
+      - name: Git Identity
         run: |
-          mkdir dist
-          touch dist/test.txt
-          touch aa.txt
-      - name: upload action result
-        uses: actions/upload-artifact@v4
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
+          git fetch --unshallow
+        env:
+          GITHUB_TOKEN: ${{ github.token}}
+
+      - name: see git1
+        run: |
+          git branch --show-current
+      - name: see git2
+        run: |
+          git diff --name-only origin/main...HEAD
+
+      - name: Setup Nodejs
+        uses: actions/setup-node@v3
+        with:
+          cache: 'npm'
+          node-version: 16
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v4
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+
+      - name: Install LCAP
+        run: |
+          npm install -g lcap@0.3.4
+          lcap config set platform https://defaulttenant.lcap.hadri.163yun.com
+          lcap config set username admin
+          lcap config set password Admin@123456
+
+      - name: Install Dep
+        run: |
+          npm install
+
+      - name: Update Pull Request
+        run: |
+          git config --global core.quotepath false          
+          git config --global gui.encoding utf-8            
+          git config --global i18n.commit.encoding utf-8    
+          git config --global i18n.logoutputencoding utf-8  
+          export LESSCHARSET=utf-8
+          mvn install:install-file -Dfile="demo_bjz_JiazhenBao/jar/nasl-metadata-maven-plugin-1.3.0/nasl-metadata-maven-plugin-1.3.0.jar" -DpomFile="demo_bjz_JiazhenBao/jar/nasl-metadata-maven-plugin-1.3.0/pom.xml"
+          mvn install:install-file -DgroupId=com.netease.lowcode -DartifactId=nasl-metadata-collector -Dversion=0.8.0 -Dpackaging=jar -Dfile="demo_bjz_JiazhenBao/jar/nasl-metadata-collector-0.8.0.jar"
+          npm run checkPR
+        env:
+          GITHUB_TOKEN: ${{ github.token}}
+          PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
+          BRANCH_NAME: ${{github.ref}}
+          GITHUB_REPOSITORY: ${{github.repository}}
+          ACTION_ID: ${{github.run_id}}
+
+      - uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist/
-      - name: upload action message
-        uses: actions/upload-artifact@v4
-        with:
-          name: pr_result
-          path: aa.txt
-      # - name: Checkout
-      #   uses: actions/checkout/@v3
-      #   with:
-      #     fetch-depth: 1
 
-      # - name: Git Identity
-      #   run: |
-      #     git config --global user.name 'github-actions[bot]'
-      #     git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-      #     git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
-      #     git fetch --unshallow
-      #   env:
-      #     GITHUB_TOKEN: ${{ github.token}}
-
-      # - name: see git1
-      #   run: |
-      #     git branch --show-current
-      # - name: see git2
-      #   run: |
-      #     git diff --name-only origin/main...HEAD
-
-      # - name: Setup Nodejs
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     cache: 'npm'
-      #     node-version: 16
-
-      # - name: Set up JDK 8
-      #   uses: actions/setup-java@v4
-      #   with:
-      #     java-version: '8'
-      #     distribution: 'temurin'
-
-      # - name: Install LCAP
-      #   run: |
-      #     npm install -g lcap@0.3.4
-      #     lcap config set platform https://defaulttenant.lcap.hadri.163yun.com
-      #     lcap config set username admin
-      #     lcap config set password Admin@123456
-
-      # - name: Install Dep
-      #   run: |
-      #     npm install
-
-      # - name: Update Pull Request
-      #   run: |
-      #     git config --global core.quotepath false
-      #     git config --global gui.encoding utf-8
-      #     git config --global i18n.commit.encoding utf-8
-      #     git config --global i18n.logoutputencoding utf-8
-      #     export LESSCHARSET=utf-8
-      #     mvn install:install-file -Dfile="demo_bjz_JiazhenBao/jar/nasl-metadata-maven-plugin-1.3.0/nasl-metadata-maven-plugin-1.3.0.jar" -DpomFile="demo_bjz_JiazhenBao/jar/nasl-metadata-maven-plugin-1.3.0/pom.xml"
-      #     mvn install:install-file -DgroupId=com.netease.lowcode -DartifactId=nasl-metadata-collector -Dversion=0.8.0 -Dpackaging=jar -Dfile="demo_bjz_JiazhenBao/jar/nasl-metadata-collector-0.8.0.jar"
-      #     npm run checkPR
-      #   env:
-      #     GITHUB_TOKEN: ${{ github.token}}
-      #     PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
-      #     BRANCH_NAME: ${{github.ref}}
-      #     GITHUB_REPOSITORY: ${{github.repository}}
-      #     ACTION_ID: ${{github.run_id}}
-
-      # - uses: actions/upload-artifact@v4
-      #   with:
-      #     name: dist
-      #     path: dist/
-
-      # - name: Notify
-      #   run: |
-      #     npm run successPR
-      #   env:
-      #     GITHUB_TOKEN: ${{ github.token}}
-      #     PULL_REQUEST_ID: ${{ github.event.pull_event.number }}
-      #     BRANCH_NAME: ${{github.ref}}
-      #     GITHUB_REPOSITORY: ${{github.repository}}
-      #     ACTION_ID: ${{github.run_id}}
+      - name: Notify
+        run: |
+          npm run successPR
+        env:
+          GITHUB_TOKEN: ${{ github.token}}
+          PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
+          BRANCH_NAME: ${{github.ref}}
+          GITHUB_REPOSITORY: ${{github.repository}}
+          ACTION_ID: ${{github.run_id}}
