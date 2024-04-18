@@ -1,39 +1,29 @@
-const fetch = require('node-fetch');
 const path = require('path');
 const fsp = require('fs/promises');
 
 const {
-  PULL_REQUEST_ID,
-  GITHUB_TOKEN,
   GITHUB_REPOSITORY,
-  BRANCH_NAME,
+  HEAD_BRANCH_NAME,
+  ACTION_ID,
+  HEAD_REPOSITORY,
 } = require('../env');
 
-const sendMessage = async (message) => {
-  // await fsp.writeFile('test.md', message, 'utf-8');
-  // return;
-  const url = `https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PULL_REQUEST_ID}/comments`;
-  await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${GITHUB_TOKEN}`,
-      Accept: 'application/vnd.github.raw+json',
-      'X-GitHub-Api-Version': '2022-11-28',
-    },
-    body: JSON.stringify({
-      body: message,
-    }),
-  }).then((v) => v.json());
-};
-
-const exitWithMessage = async (message) => {
+const exitWithMessage = async (message, hasError = false) => {
+  const url = `https://github.com/${GITHUB_REPOSITORY}/actions/runs/${ACTION_ID}`;
   try {
-    await sendMessage(message);
+    await fsp.writeFile('test.md', message, 'utf-8');
+    await fsp.writeFile(
+      'pr_result.json',
+      JSON.stringify({
+        message: `关联[ACTION](${url})\n\n${message}`,
+        hasError,
+      }),
+      'utf-8',
+    );
   } catch (e) {
-    console.error('IMPORTANT: exitWithMessage ~ e:', e);
+    console.error(`IMPORTANT: exitWithMessage ~ m[exitCode]:`, e);
   } finally {
-    process.exit(1);
+    process.exit(0); // normal exit
   }
 };
 
@@ -43,7 +33,7 @@ const erroredPackagesToMsg = (packages) => {
   function toError({ error, packageName, packageRoot }) {
     const _errorMsg = error.message || `${error}`;
     const errorMsg = _errorMsg.split('\n').slice(-100).join('\n');
-    const packgeRootURL = `https://github.com/${GITHUB_REPOSITORY}/tree/${BRANCH_NAME}/${packageRoot}`;
+    const packgeRootURL = `https://github.com/${HEAD_REPOSITORY}/tree/${HEAD_BRANCH_NAME}/${packageRoot}`;
     const msg = `[${
       packageName || packageRoot
     }](${packgeRootURL})存在错误：\n\`\`\`bash\n${errorMsg}\n\`\`\``;
@@ -100,7 +90,7 @@ const toManyPackagesToMsg = (packages) => {
   return `存在多处package修改:\n\n${str}`;
 
   function toError({ packageName, cwd, changedFiles }) {
-    const packgeRootURL = `https://github.com/${GITHUB_REPOSITORY}/tree/${BRANCH_NAME}/${cwd}`;
+    const packgeRootURL = `https://github.com/${HEAD_REPOSITORY}/tree/${HEAD_BRANCH_NAME}/${cwd}`;
     const msg = `[${packageName}](${packgeRootURL})涉及的修改：\n\`\`\`bash\n${prettyFileTree(
       changedFiles,
     )}\n\`\`\``;
@@ -113,5 +103,4 @@ module.exports = {
   erroredPackagesToMsg,
   unsupportedFileToMsg,
   toManyPackagesToMsg,
-  sendMessage,
 };

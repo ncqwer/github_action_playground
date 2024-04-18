@@ -6,6 +6,7 @@ const {
   COMPlIE_WITH_PARALLEL,
   DEPLOY_WITH_PARALLEL,
   ONLY_ONE_PACKAGE_PER_PR,
+  TEMP_FILE,
 } = require('./env');
 const { lint, complie, deploy } = require('./lifecycle');
 const { getPackage } = require('./packageInfo/getPackage');
@@ -98,13 +99,32 @@ const processPackagesErrors = async (erroredPackages) => {
     await exitWithMessage(erroredPackagesToMsg(erroredPackages));
 };
 
-const main = async () => {
+const tryGetPackagesFromTempFile = async () => {
+  const tmpResult = await getFromTempFile();
+  if (tmpResult) {
+    return tmpResult;
+  }
   const changedFiles = await getChangedFile();
   if (changedFiles.length === 0) return;
   const store = createLibraryStore();
   await Promise.all(changedFiles.map((filename) => store.process(filename)));
   const packages = store.getAllPackages();
   const noPackageFiles = store.getAllNoPackageFile();
+  return { packages, noPackageFiles };
+
+  async function getFromTempFile() {
+    try {
+      const fileContent = await fsp.readFile(TEMP_FILE, 'utf-8');
+      return JSON.parse(fileContent);
+    } catch {
+      return null;
+    }
+  }
+};
+
+const main = async () => {
+  const { packages, noPackageFiles } = await tryGetPackagesFromTempFile();
+
   const getValidPackages = () => packages.filter((p) => !p.error);
   const getErroredPackages = () => packages.filter((p) => !!p.error);
 

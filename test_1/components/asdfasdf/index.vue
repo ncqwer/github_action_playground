@@ -1,9 +1,10 @@
 <template>
-  <div>{{value}}</div>
+  <div>{{ value }}</div>
 </template>
 
 <script>
 export default {
+  akjsdklsf
     name:"asdfasdf",
     props:{
       value:{
@@ -14,6 +15,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>
