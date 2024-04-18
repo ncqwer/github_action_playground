@@ -53,6 +53,22 @@ jobs:
           else
               echo "no"
           fi
+      - name: mock action message
+        run: |
+          mkdir dist
+          touch dist/test.txt
+          mkdir pr_result
+          touch pr_result/aa.txt
+      - name: upload action result
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - name: upload action message
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr_result
+          path: pr_result/
       # - name: Checkout
       #   uses: actions/checkout/@v3
       #   with:
