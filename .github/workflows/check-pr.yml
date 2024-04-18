@@ -87,8 +87,8 @@ jobs:
           export LESSCHARSET=utf-8
           npm run detectPR
           {
-            echo "DIFF_STATE=<EOF"
-            echo "$(cat package.json)"
+            echo "DIFF_STATE<<EOF"
+            echo "$(cat diff_state.json)"
             echo "EOF"
           } >> "$GITHUB_ENV"
 
