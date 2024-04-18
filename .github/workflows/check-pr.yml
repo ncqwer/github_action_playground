@@ -86,9 +86,11 @@ jobs:
           git config --global i18n.logoutputencoding utf-8
           export LESSCHARSET=utf-8
           npm run detectPR
-          echo 'DIFF_STATE<<EOF' >> $GITHUB_ENV
-          cat ./diff_stat.json >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          {
+            echo 'DIFF_STATE<<EOF'
+            cat diff_stat.json
+            echo EOF
+          } >> "$GITHUB_ENV"
 
       - name: Set up JDK 8
         if: ${{fromJson(env.DIFF_STATE).needJAVA}}
@@ -113,9 +115,12 @@ jobs:
       - name: Check Pull Request
         run: |
           npm run checkPR
-          echo 'CHECK_RESULT<<EOF' >> $GITHUB_ENV
-          cat ./pr_result.json >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          {
+            echo 'CHECK_RESULT<<EOF'
+            cat pr_result.json
+            echo EOF
+          } >> "$GITHUB_ENV"
+
         env:
           GITHUB_TOKEN: ${{ github.token}}
           PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
