@@ -1,0 +1,125 @@
+{
+    "name": "cw_test_www",
+    "title": "sss",
+    "description": "",
+    "specVersion": "1.0.0",
+    "type": "module",
+    "subType": "extension",
+    "version": "0.1.0",
+    "frontends": [
+        {
+            "concept": "FrontendLibrary",
+            "name": "pc",
+            "type": "pc",
+            "viewComponents": [],
+            "logics": [
+                {
+                    "concept": "Logic",
+                    "name": "aaa",
+                    "description": "aaa",
+                    "category": "cw_test_www",
+                    "params": [
+                        {
+                            "name": "options",
+                            "concept": "Param",
+                            "description": "这是一个描述",
+                            "required": false,
+                            "typeAnnotation": {
+                                "concept": "TypeAnnotation",
+                                "typeKind": "primitive",
+                                "typeName": "String",
+                                "typeNamespace": "nasl.core"
+                            }
+                        }
+                    ],
+                    "returns": [
+                        {
+                            "name": "result",
+                            "concept": "Return",
+                            "typeAnnotation": {
+                                "concept": "TypeAnnotation",
+                                "typeKind": "primitive",
+                                "typeName": "String",
+                                "typeNamespace": "nasl.core"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "concept": "FrontendLibrary",
+            "name": "h5",
+            "type": "h5",
+            "viewComponents": [],
+            "logics": [
+                {
+                    "concept": "Logic",
+                    "name": "aaa",
+                    "description": "aaa",
+                    "category": "cw_test_www",
+                    "params": [
+                        {
+                            "name": "options",
+                            "concept": "Param",
+                            "description": "这是一个描述",
+                            "required": false,
+                            "typeAnnotation": {
+                                "concept": "TypeAnnotation",
+                                "typeKind": "primitive",
+                                "typeName": "String",
+                                "typeNamespace": "nasl.core"
+                            }
+                        }
+                    ],
+                    "returns": [
+                        {
+                            "name": "result",
+                            "concept": "Return",
+                            "typeAnnotation": {
+                                "concept": "TypeAnnotation",
+                                "typeKind": "primitive",
+                                "typeName": "String",
+                                "typeNamespace": "nasl.core"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "summary": {
+        "name": "cw_test_www",
+        "title": "sss",
+        "version": "0.1.0",
+        "description": "",
+        "frontends": [
+            {
+                "type": "pc",
+                "viewComponents": [],
+                "logics": [
+                    {
+                        "name": "aaa",
+                        "description": "aaa"
+                    }
+                ]
+            },
+            {
+                "type": "h5",
+                "viewComponents": [],
+                "logics": [
+                    {
+                        "name": "aaa",
+                        "description": "aaa"
+                    }
+                ]
+            }
+        ]
+    },
+    "compilerInfoMap": {
+        "js": {
+            "prefix": "extension"
+        }
+    },
+    "ideVersion": "3.2"
+}

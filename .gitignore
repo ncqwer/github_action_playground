@@ -30,3 +30,7 @@ my.secrets
 **/*.zip
 
 **/target/
+
+
+diff_stat.json
+pr_result.json

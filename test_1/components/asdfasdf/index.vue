@@ -1,19 +1,17 @@
 <template>
-  <div>{{value}}</div>
+  <div>{{ value }}</div>
 </template>
 
 <script>
 export default {
-    name:"asdfasdf",
-    props:{
-      value:{
-        type:String,
-        default:"请在这里编写代码"
-      }
-    }
-}
+  name: 'asdfasdf',
+  props: {
+    value: {
+      type: String,
+      default: '请在这里编写代码',
+    },
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
