@@ -48,7 +48,7 @@ jobs:
           echo '${{github.event.repository.full_name}}'
           echo '${{github.actor}}'
           echo '${{github.triggering_actor}}'
-          echo 1
+          exit 1
           if [ "${{secrets.TEST}}" = "test111" ]; then
               echo "ok"
           else
