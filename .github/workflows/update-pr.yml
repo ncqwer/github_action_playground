@@ -57,8 +57,7 @@ jobs:
         run: |
           mkdir dist
           touch dist/test.txt
-          mkdir pr_result
-          touch pr_result/aa.txt
+          touch aa.txt
       - name: upload action result
         uses: actions/upload-artifact@v4
         with:
@@ -68,7 +67,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: pr_result
-          path: pr_result/
+          path: aa.txt
       # - name: Checkout
       #   uses: actions/checkout/@v3
       #   with:
