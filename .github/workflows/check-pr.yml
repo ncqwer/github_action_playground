@@ -88,7 +88,7 @@ jobs:
           npm run detectPR
           {
             echo "DIFF_STATE<<EOF"
-            echo "$(cat diff_state.json)"
+            echo "$(cat diff_stat.json)"
             echo "EOF"
           } >> "$GITHUB_ENV"
 
