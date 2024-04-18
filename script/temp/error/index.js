@@ -6,6 +6,7 @@ const {
   HEAD_BRANCH_NAME,
   ACTION_ID,
   HEAD_REPOSITORY,
+  PULL_REQUEST_ID,
 } = require('../env');
 
 const exitWithMessage = async (message, hasError = true) => {
@@ -18,6 +19,7 @@ const exitWithMessage = async (message, hasError = true) => {
       JSON.stringify({
         message: m,
         hasError,
+        pull_request_id: PULL_REQUEST_ID,
       }),
       'utf-8',
     );

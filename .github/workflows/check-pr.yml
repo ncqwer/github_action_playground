@@ -1,5 +1,5 @@
 # 为了试验，此处作为单独的 Workflow，在实际工作中可 Install -> Lint、Test -> Preview 串行检验
-name: CheckPR
+name: Check PR
 
 # 执行 CI 的时机: 当 git push 到 main分支时
 on:
@@ -124,7 +124,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token}}
           PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
-          HEAD_BRANCH_NAME: ${{github.ref}}
+          HEAD_BRANCH_NAME: ${{github.head_ref}}
           HEAD_REPOSITORY: ${{github.event.pull_request.head.repo.full_name}}
           GITHUB_REPOSITORY: ${{github.repository}}
           ACTION_ID: ${{github.run_id}}
