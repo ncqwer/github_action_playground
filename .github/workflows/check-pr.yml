@@ -86,10 +86,9 @@ jobs:
           git config --global i18n.logoutputencoding utf-8
           export LESSCHARSET=utf-8
           npm run detectPR
-          cat diff_stat.json
           {
-            echo 'DIFF_STATE<<EOF'
-            cat diff_stat.json
+            echo 'DIFF_STATE=<<EOF'
+            echo $(cat diff_stat.json)
             echo EOF
           } >> "$GITHUB_ENV"
 
@@ -118,7 +117,7 @@ jobs:
           npm run checkPR
           {
             echo 'CHECK_RESULT<<EOF'
-            cat pr_result.json
+            echo $(cat pr_result.json)
             echo EOF
           } >> "$GITHUB_ENV"
 
