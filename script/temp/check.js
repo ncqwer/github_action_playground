@@ -176,6 +176,8 @@ const main = async () => {
     DEPLOY_WITH_PARALLEL === 'true',
   );
   await processPackagesErrors(getErroredPackages());
+
+  await exitWithMessage('successful', false);
 };
 
 main();

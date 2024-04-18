@@ -8,14 +8,15 @@ const {
   HEAD_REPOSITORY,
 } = require('../env');
 
-const exitWithMessage = async (message, hasError = false) => {
+const exitWithMessage = async (message, hasError = true) => {
   const url = `https://github.com/${GITHUB_REPOSITORY}/actions/runs/${ACTION_ID}`;
   try {
-    await fsp.writeFile('test.md', message, 'utf-8');
+    const m = `关联[ACTION](${url})\n\n${message}`;
+    await fsp.writeFile('test.md', m, 'utf-8');
     await fsp.writeFile(
       'pr_result.json',
       JSON.stringify({
-        message: `关联[ACTION](${url})\n\n${message}`,
+        message: m,
         hasError,
       }),
       'utf-8',
