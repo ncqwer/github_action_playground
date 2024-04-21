@@ -70,7 +70,7 @@ jobs:
           git config --global i18n.commit.encoding utf-8
           git config --global i18n.logoutputencoding utf-8
           export LESSCHARSET=utf-8
-          npm run detectPR from-commit
+          npm run detectPR from-release
           {
             echo "DIFF_STATE<<EOF"
             echo "$(cat diff_stat.json)"
