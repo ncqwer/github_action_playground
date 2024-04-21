@@ -22,6 +22,8 @@ const ARTIFACT_ID = process.env.ARTIFACT_ID || '1424334562';
 
 const TEMP_FILE = process.env.TEMP_FILE || 'diff_stat.json';
 
+const COMMIT_SHA = process.env.COMMIT_SHA || 'main';
+
 module.exports = {
   ALLOW_MODIFY_OTHERS,
   LINT_WITH_PARALLEL,
@@ -37,4 +39,5 @@ module.exports = {
   ACTION_ID,
   TEMP_FILE,
   ARTIFACT_ID,
+  COMMIT_SHA,
 };

@@ -8,10 +8,12 @@ const execCommand = async (
     exec(commandStr, options, (err, stdout, stderr) => {
       console.log('===>', commandStr, options, stdout);
       if (err) {
+        stderr && console.error(commandStr, stderr);
         rej(err);
         return;
       }
       if (throwWhenStderr && stderr) {
+        stderr && console.error(commandStr, stderr);
         rej(new Error(stderr));
         return;
       }
