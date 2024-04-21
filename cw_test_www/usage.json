@@ -5,7 +5,7 @@
     "specVersion": "1.0.0",
     "type": "module",
     "subType": "extension",
-    "version": "0.1.0",
+    "version": "0.1.2",
     "frontends": [
         {
             "concept": "FrontendLibrary",
@@ -91,7 +91,7 @@
     "summary": {
         "name": "cw_test_www",
         "title": "sss",
-        "version": "0.1.0",
+        "version": "0.1.2",
         "description": "",
         "frontends": [
             {
