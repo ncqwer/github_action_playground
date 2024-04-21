@@ -51,7 +51,7 @@ jobs:
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
           git fetch --unshallow
         env:
-          GITHUB_TOKEN: ${{ github.token}}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN}}
 
       - name: Setup Nodejs
         uses: actions/setup-node@v3
@@ -102,7 +102,7 @@ jobs:
           npm run release from-release
 
         env:
-          GITHUB_TOKEN: ${{ github.token}}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN}}
           HEAD_BRANCH_NAME: ${{github.head_ref}}
           GITHUB_REPOSITORY: ${{github.repository}}
           ACTION_ID: ${{github.run_id}}
