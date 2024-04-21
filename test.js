@@ -4,6 +4,6 @@ const main = async () => {
   await execCommand('git pull && git push --force-with-lease');
 };
 
-main.catch((e) => {
+main().catch((e) => {
   console.log(e);
 });
