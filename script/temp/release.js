@@ -110,7 +110,7 @@ const main = async () => {
     await execCommands([
       'git add . ',
       'git commit -q -m "publish version by ci"',
-      'git pull && git push',
+      'git pull && git push --force-with-lease',
     ]);
   }
   await fsp.mkdir('dist');
