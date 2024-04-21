@@ -75,8 +75,8 @@ const main = async () => {
   );
   await processPackagesErrors(getErroredPackages());
 
-  await Promise.all(
-    getValidPackages().map(async ({ cwd, packageInfo, nextVersion, type }) => {
+  await processPackageWithParallelFlag(
+    async ({ cwd, packageInfo, nextVersion, type }) => {
       if (type !== 'f') return;
       const [zipFile] = await glob(['target/*.zip', '*.zip'], { cwd });
       let md5 = '';
@@ -101,13 +101,18 @@ const main = async () => {
         ),
       );
       await execCommand(`git tag ${packageInfo.name}@${nextVersion}`);
-    }),
+    },
+    getValidPackages(),
+    true,
   );
-  await execCommands([
-    'git add . ',
-    'git commit -q -m "publish version by ci"',
-    'git pull && git push',
-  ]);
+  await processPackagesErrors(getErroredPackages());
+  if (getValidPackages().length > 0) {
+    await execCommands([
+      'git add . ',
+      'git commit -q -m "publish version by ci"',
+      'git pull && git push --force-with-lease',
+    ]);
+  }
   await fsp.mkdir('dist');
   // deploy
   await processPackageWithParallelFlag(
