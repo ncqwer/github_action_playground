@@ -1,22 +1,16 @@
 const fsp = require('fs/promises');
 const {
-  ALLOW_MODIFY_OTHERS,
-  LINT_WITH_PARALLEL,
   COMPlIE_WITH_PARALLEL,
   DEPLOY_WITH_PARALLEL,
-  ONLY_ONE_PACKAGE_PER_PR,
   TEMP_FILE,
 } = require('./env');
-const { lint, complie, deploy } = require('./lifecycle');
-const {
-  exitWithMessage,
-  erroredPackagesToMsg,
-  unsupportedFileToMsg,
-  toManyPackagesToMsg,
-} = require('./error');
-const { customCheck } = require('./customCheck');
+const crypto = require('crypto');
+const { complie, deploy } = require('./lifecycle');
 
 const detect = require('./detect');
+const { execCommands, execCommand } = require('./utils/execCommand');
+const path = require('path');
+const { glob } = require('glob');
 
 const processPackageWithParallelFlag = (fn, packages, isParallel) => {
   if (isParallel) {
@@ -42,8 +36,9 @@ const processPackageWithParallelFlag = (fn, packages, isParallel) => {
 };
 
 const processPackagesErrors = async (erroredPackages) => {
-  if (erroredPackages.length > 0)
-    await exitWithMessage(erroredPackagesToMsg(erroredPackages));
+  if (erroredPackages.length > 0) {
+    process.exit(1);
+  }
 };
 
 const tryGetPackagesFromTempFile = async () => {
@@ -65,41 +60,11 @@ const tryGetPackagesFromTempFile = async () => {
 };
 
 const main = async () => {
-  const { packages, noPackageFiles } = await tryGetPackagesFromTempFile();
+  const { packages } = await tryGetPackagesFromTempFile();
 
   const getValidPackages = () => packages.filter((p) => !p.error);
   const getErroredPackages = () => packages.filter((p) => !!p.error);
 
-  if (noPackageFiles.length > 0) {
-    if (ALLOW_MODIFY_OTHERS === 'true') {
-      console.warn(
-        '本分支修改了非依赖库文件，ls:\n',
-        noPackageFiles.join('\n'),
-      );
-    } else {
-      return exitWithMessage(unsupportedFileToMsg(noPackageFiles));
-    }
-  }
-
-  await processPackagesErrors(getErroredPackages());
-  const validPackages = getValidPackages();
-
-  if (ONLY_ONE_PACKAGE_PER_PR === 'true' && validPackages.length > 1) {
-    await exitWithMessage(toManyPackagesToMsg(validPackages));
-  }
-
-  // custom check for temp
-  await customCheck({
-    packages,
-    exitWithMessage,
-  });
-
-  // lint
-  await processPackageWithParallelFlag(
-    lint,
-    getValidPackages(),
-    LINT_WITH_PARALLEL === 'true',
-  );
   await processPackagesErrors(getErroredPackages());
 
   // comlie
@@ -110,6 +75,39 @@ const main = async () => {
   );
   await processPackagesErrors(getErroredPackages());
 
+  await Promise.all(
+    getValidPackages().map(async ({ cwd, packageInfo, nextVersion, type }) => {
+      if (type !== 'f') return;
+      const [zipFile] = await glob(['target/*.zip', '*.zip'], { cwd });
+      let md5 = '';
+      if (zipFile) {
+        const fileContent = await fsp.readFile(path.resolve(cwd, zipFile));
+        const hash = crypto.createHash('md5');
+        hash.update(fileContent);
+        md5 = hash.digest('hex');
+      }
+      await fsp.writeFile(
+        path.resolve(cwd, 'package.json'),
+        JSON.stringify(
+          Object.assign(
+            {
+              ...packageInfo,
+              version: nextVersion,
+            },
+            md5 && { lastRelease: md5 },
+          ),
+          null,
+          2,
+        ),
+      );
+      await execCommand(`git tag ${packageInfo.name}@${nextVersion}`);
+    }),
+  );
+  await execCommands([
+    'git add . ',
+    'git commit -q -m "publish version by ci"',
+    'git pull && git push',
+  ]);
   await fsp.mkdir('dist');
   // deploy
   await processPackageWithParallelFlag(
@@ -118,8 +116,6 @@ const main = async () => {
     DEPLOY_WITH_PARALLEL === 'true',
   );
   await processPackagesErrors(getErroredPackages());
-
-  await exitWithMessage('successful', false);
 };
 
 main();

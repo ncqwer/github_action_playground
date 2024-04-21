@@ -1,6 +1,6 @@
 {
   "name": "mono-example",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "description": "mono example",
   "scripts": {
@@ -14,7 +14,8 @@
     "changelog:comment": "node script/changelog.js from-comment",
     "checkPR": "rm -rf dist && node script/temp/check.js",
     "detectPR": "node script/temp/detect.js",
-    "successPR": "node script/temp/success.js"
+    "successPR": "node script/temp/success.js",
+    "release": "node script/temp/release.js"
   },
   "license": "MIT",
   "devDependencies": {
