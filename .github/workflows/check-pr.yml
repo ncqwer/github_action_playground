@@ -142,7 +142,7 @@ jobs:
           exit 1
 
       - name: Upload Assets
-        if: ${{fromJson(env.DIFF_STATE).packages.length > 0}}
+        if: ${{fromJson(env.DIFF_STATE).packages[0]}}
         uses: actions/upload-artifact@v4
         id: upload_assets
         with:
@@ -150,7 +150,7 @@ jobs:
           path: dist/
 
       - name: Append Assets Download url
-        if: ${{fromJson(env.DIFF_STATE).packages.length > 0}}
+        if: ${{fromJson(env.DIFF_STATE).packages[0]}}
         run: |
           npm run successPR
         env:
@@ -163,7 +163,7 @@ jobs:
           ACTION_ID: ${{github.run_id}}
 
       - name: Upload PR Result Error
-        if: ${{fromJson(env.DIFF_STATE).packages.length > 0}}
+        if: ${{fromJson(env.DIFF_STATE).packages[0]}}
         uses: actions/upload-artifact@v4
         with:
           name: pr_result
