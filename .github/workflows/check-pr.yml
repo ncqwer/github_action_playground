@@ -47,6 +47,7 @@ jobs:
           echo '${{github.event.repository.full_name}}'
           echo '${{github.actor}}'
           echo '${{github.triggering_actor}}'
+          echo '${{github.event.pull_request.user.name}}'
       - name: Checkout
         uses: actions/checkout/@v3
         with:
