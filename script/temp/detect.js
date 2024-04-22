@@ -1,16 +1,9 @@
-const { execCommand } = require('./utils/execCommand');
 const fsp = require('fs/promises');
+const path = require('path');
 const { TEMP_FILE } = require('./env');
 const { getPackage } = require('./packageInfo/getPackage');
 const { getPackageRoot } = require('./packageInfo/getPackageRoot');
-
-const getChangedFile = async () => {
-  const fileStr = await execCommand('git diff --name-only origin/main...HEAD');
-  return fileStr
-    .split('\n')
-    .map((v) => v.trim())
-    .filter(Boolean);
-};
+const { getChangedFileFromRange, getChangedFile } = require('./git');
 
 const createLibraryStore = () => {
   const store = new Map();
@@ -56,23 +49,27 @@ const createLibraryStore = () => {
   }
 };
 
-const main = async () => {
-  const changedFiles = await getChangedFile();
+const main = async (needWrite = false) => {
+  const isRelease = process.argv[2] === 'from-release';
+  const fn = !isRelease ? getChangedFileFromRange : getChangedFile;
+  const changedFiles = await fn();
   if (changedFiles.length === 0) return;
   const store = createLibraryStore();
   await Promise.all(changedFiles.map((filename) => store.process(filename)));
   const packages = store.getAllPackages();
   const noPackageFiles = store.getAllNoPackageFile();
+  const info = {
+    packages,
+    noPackageFiles,
+    needJAVA: packages.filter((v) => v.type !== 'f').length > 0,
+  };
 
-  await fsp.writeFile(
-    TEMP_FILE,
-    JSON.stringify({
-      packages,
-      noPackageFiles,
-      needJAVA: packages.filter((v) => v.type !== 'f').length > 0,
-    }),
-    'utf-8',
-  );
+  if (needWrite) await fsp.writeFile(TEMP_FILE, JSON.stringify(info), 'utf-8');
+  return info;
 };
 
-main();
+module.exports = main;
+
+if (path.basename(process.argv[1]) === 'detect.js') {
+  main(true);
+}
