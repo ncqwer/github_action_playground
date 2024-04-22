@@ -2,7 +2,7 @@
   "name": "test_1",
   "title": "test1",
   "description": "",
-  "version": "0.1.2",
+  "version": "0.1.9",
   "main": "./index.js",
   "author": "",
   "repository": "",
@@ -50,5 +50,6 @@
   },
   "resolutions": {
     "globby": "9.2.0"
-  }
+  },
+  "lastRelease": "f46c92a4992d0a93709b389cf77d689d"
 }

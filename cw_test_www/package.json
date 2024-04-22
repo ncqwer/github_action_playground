@@ -2,7 +2,7 @@
   "name": "cw_test_www",
   "title": "sss",
   "description": "",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "main": "./index.js",
   "author": "",
   "repository": "",
@@ -50,5 +50,6 @@
   },
   "template": {
     "inited": true
-  }
+  },
+  "lastRelease": "501d873977d03f9d280710bff501e2f1"
 }

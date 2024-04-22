@@ -1,16 +1,20 @@
 # 为了试验，此处作为单独的 Workflow，在实际工作中可 Install -> Lint、Test -> Preview 串行检验
-name: Check PR
+name: Release
 
 # 执行 CI 的时机: 当 git push 到 main分支时
 on:
-  pull_request:
+  push:
     branches: main
 
 permissions:
   pull-requests: write
+  issues: write
+  contents: write
 
 jobs:
   build:
+    # 仅在pr关闭后执行
+    if: startsWith(github.event.head_commit.message, 'Merge pull request ')
     runs-on: ubuntu-latest
 
     steps:
@@ -24,34 +28,22 @@ jobs:
           fi
       - name: see vars
         run: |
-          echo '${{github.event.pull_request.head.ref}}'
-          echo '${{github.event.pull_request.head.sha}}'
-          echo '${{github.event.pull_request.head.repo.branches_url}}'
-          echo '${{github.event.pull_request.head.repo.full_name}}'
-          echo '${{github.event.pull_request.base.ref}}'
-          echo '${{github.event.pull_request.base.sha}}'
-          echo '${{github.event.pull_request.base.repo.branches_url}}'
-          echo '${{github.event.pull_request.base.repo.full_name}}'
           echo '${{github.head_ref}}'
           echo '${{github.ref}}'
           echo '${{github.ref_name}}'
           echo '${{github.repository}}'
-          echo '${{ github.event.pull_request.number }}'
           echo '${{ github.run_id }}'
-          echo '${{github.event.pull_request.user.name}}'
-          echo '${{github.event.pull_request.maintainer_can_modify}}'
-          echo '${{github.event.pull_request.user.id}}'
           echo '${{github.event.sender.id}}'
           echo '${{github.event.repository.fork}}'
           echo '${{github.event.repository.name}}'
           echo '${{github.event.repository.full_name}}'
           echo '${{github.actor}}'
           echo '${{github.triggering_actor}}'
-          echo '${{github.event.pull_request.user.name}}'
       - name: Checkout
         uses: actions/checkout/@v3
         with:
           fetch-depth: 1
+          token: ${{secrets.RELEASE_TOKEN}}
 
       - name: Git Identity
         run: |
@@ -60,14 +52,7 @@ jobs:
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
           git fetch --unshallow
         env:
-          GITHUB_TOKEN: ${{ github.token}}
-
-      - name: see git1
-        run: |
-          git branch --show-current
-      - name: see git2
-        run: |
-          git diff --name-only origin/main...HEAD
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN}}
 
       - name: Setup Nodejs
         uses: actions/setup-node@v3
@@ -86,7 +71,7 @@ jobs:
           git config --global i18n.commit.encoding utf-8
           git config --global i18n.logoutputencoding utf-8
           export LESSCHARSET=utf-8
-          npm run detectPR
+          npm run detectPR from-release
           {
             echo "DIFF_STATE<<EOF"
             echo "$(cat diff_stat.json)"
@@ -115,57 +100,10 @@ jobs:
 
       - name: Check Pull Request
         run: |
-          npm run checkPR
-          {
-            echo 'CHECK_RESULT<<EOF'
-            echo $(cat pr_result.json)
-            echo EOF
-          } >> "$GITHUB_ENV"
+          npm run release from-release
 
         env:
-          GITHUB_TOKEN: ${{ github.token}}
-          PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN}}
           HEAD_BRANCH_NAME: ${{github.head_ref}}
-          HEAD_REPOSITORY: ${{github.event.pull_request.head.repo.full_name}}
           GITHUB_REPOSITORY: ${{github.repository}}
           ACTION_ID: ${{github.run_id}}
-
-      - name: Upload PR Result Error
-        if: ${{fromJson(env.CHECK_RESULT).hasError}}
-        uses: actions/upload-artifact@v4
-        with:
-          name: pr_result
-          path: pr_result.json
-
-      - name: Exit If Error
-        if: ${{fromJson(env.CHECK_RESULT).hasError}}
-        run: |
-          exit 1
-
-      - name: Upload Assets
-        if: ${{fromJson(env.DIFF_STATE).packages[0]}}
-        uses: actions/upload-artifact@v4
-        id: upload_assets
-        with:
-          name: dist
-          path: dist/
-
-      - name: Append Assets Download url
-        if: ${{fromJson(env.DIFF_STATE).packages[0]}}
-        run: |
-          npm run successPR
-        env:
-          ARTIFACT_ID: ${{steps.upload_assets.outputs.artifact-id}}
-          GITHUB_TOKEN: ${{ github.token}}
-          PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
-          HEAD_BRANCH_NAME: ${{github.head_ref}}
-          HEAD_REPOSITORY: ${{github.event.pull_request.head.repo.full_name}}
-          GITHUB_REPOSITORY: ${{github.repository}}
-          ACTION_ID: ${{github.run_id}}
-
-      - name: Upload PR Result Error
-        if: ${{fromJson(env.DIFF_STATE).packages[0]}}
-        uses: actions/upload-artifact@v4
-        with:
-          name: pr_result
-          path: pr_result.json
