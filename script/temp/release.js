@@ -106,7 +106,7 @@ const main = async () => {
     true,
   );
   await processPackagesErrors(getErroredPackages());
-  if (getValidPackages().length > 0) {
+  if (getValidPackages().filter((v) => v.type === 'f').length > 0) {
     await execCommands([
       'git add . ',
       'git commit -q -m "publish version by ci"',

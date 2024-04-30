@@ -70,6 +70,10 @@ const main = async () => {
   const getValidPackages = () => packages.filter((p) => !p.error);
   const getErroredPackages = () => packages.filter((p) => !!p.error);
 
+  console.log(
+    '🚀 ~ file: check.js:75 ~ main ~ ALLOW_MODIFY_OTHERS:',
+    ALLOW_MODIFY_OTHERS,
+  );
   if (noPackageFiles.length > 0) {
     if (ALLOW_MODIFY_OTHERS === 'true') {
       console.warn(
@@ -92,6 +96,10 @@ const main = async () => {
   await customCheck({
     packages,
     exitWithMessage,
+    processPackageWithParallelFlag,
+    getValidPackages,
+    getErroredPackages,
+    processPackagesErrors,
   });
 
   // lint

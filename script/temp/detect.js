@@ -32,7 +32,9 @@ const createLibraryStore = () => {
     const info = await getPackage(packageRoot).catch((e) => {
       return {
         packageRoot,
-        error: e,
+        error: {
+          message: e.message || `${e.message}`,
+        },
       };
     });
     Object.assign(package, info);

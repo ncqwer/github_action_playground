@@ -1731,7 +1731,7 @@
   "resolved" "https://registry.npmjs.org/semver/-/semver-6.3.1.tgz"
   "version" "6.3.1"
 
-"semver@^7.3.7":
+"semver@^7.3.7", "semver@^7.6.0":
   "integrity" "sha512-EnwXhrlwXMk9gKu5/flx5sv/an57AkRplG3hTK68W7FRDN+k+OWBj65M7719OkA82XLBxrcX0KSHj+X5COhOVg=="
   "resolved" "https://registry.npmjs.org/semver/-/semver-7.6.0.tgz"
   "version" "7.6.0"

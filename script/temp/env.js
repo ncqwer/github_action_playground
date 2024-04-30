@@ -5,15 +5,14 @@ const COMPlIE_WITH_PARALLEL = process.env.BUILD_WITH_PARALLEL || 'true'; // comp
 const DEPLOY_WITH_PARALLEL = process.env.UPLOAD_WITH_PARALLEL || 'true'; // deploy parallel
 const AUTO_ADJUST_RESOLUTION = process.env.AUTO_ADJUST_RESOLUTION || 'true'; // fix globby error
 
-const ONLY_ONE_PACKAGE_PER_PR = process.env.ONLY_ONE_PACKAGE_PER_PR || 'true'; // 是否组织一个pr中修改多个package
+const ONLY_ONE_PACKAGE_PER_PR = process.env.ONLY_ONE_PACKAGE_PER_PR || 'true'; // 是否阻止一个pr中修改多个package
 
-const HEAD_BRANCH_NAME =
-  process.env.HEAD_BRANCH_NAME || 'Task(libraryB)-23234234-hsj-234324';
+const HEAD_BRANCH_NAME = process.env.HEAD_BRANCH_NAME || 'main';
 const GITHUB_REPOSITORY =
-  process.env.GITHUB_REPOSITORY || 'ncqwer/github_action_playground';
+  process.env.GITHUB_REPOSITORY || 'netease-lcap/CodeWaveAssetCompetition2024d';
 const HEAD_REPOSITORY =
-  process.env.HEAD_REPOSITORY || 'ncqwer/github_action_playground';
-const PULL_REQUEST_ID = process.env.PULL_REQUEST_ID || '9';
+  process.env.HEAD_REPOSITORY || 'netease-lcap/CodeWaveAssetCompetition2024';
+const PULL_REQUEST_ID = process.env.PULL_REQUEST_ID || '106';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 const ACTION_ID = process.env.ACTION_ID || '8655960510';

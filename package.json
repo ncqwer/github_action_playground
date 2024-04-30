@@ -33,6 +33,7 @@
     "typescript": "^4.8.2"
   },
   "dependencies": {
-    "glob": "^10.3.12"
+    "glob": "^10.3.12",
+    "semver": "^7.6.0"
   }
 }

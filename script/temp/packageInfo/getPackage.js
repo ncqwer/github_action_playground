@@ -103,7 +103,9 @@ const getPackage = async (packageRoot) => {
   if (be) return be;
   const fe = await getFrontendPackage(packageRoot);
   if (fe) return fe;
-  throw new Error('不存在合法的package配置');
+  throw new Error(
+    '不存在合法的package配置,当前目录下找不到pom.xml或package.json',
+  );
 };
 
 module.exports = { getPackage };
