@@ -1,4 +1,3 @@
-const { execCommand } = require('./utils/execCommand');
 const fsp = require('fs/promises');
 const {
   ALLOW_MODIFY_OTHERS,
@@ -7,10 +6,12 @@ const {
   DEPLOY_WITH_PARALLEL,
   ONLY_ONE_PACKAGE_PER_PR,
   TEMP_FILE,
+  PR_EVENT_ACTION,
+  NOTIFY_CONFIG_JSON,
+  HEAD_REPOSITORY,
+  PULL_REQUEST_ID,
 } = require('./env');
 const { lint, complie, deploy } = require('./lifecycle');
-const { getPackage } = require('./packageInfo/getPackage');
-const { getPackageRoot } = require('./packageInfo/getPackageRoot');
 const {
   exitWithMessage,
   erroredPackagesToMsg,
@@ -18,58 +19,9 @@ const {
   toManyPackagesToMsg,
 } = require('./error');
 const { customCheck } = require('./customCheck');
+const nodemailer = require('nodemailer');
 
-const getChangedFile = async () => {
-  const fileStr = await execCommand('git diff --name-only origin/main...HEAD');
-  return fileStr
-    .split('\n')
-    .map((v) => v.trim())
-    .filter(Boolean);
-};
-
-const createLibraryStore = () => {
-  const store = new Map();
-  const noPackageFiles = [];
-
-  return {
-    process,
-    getAllNoPackageFile,
-    getAllPackages,
-  };
-
-  async function process(pathname) {
-    const packageRoot = getPackageRoot(pathname);
-    if (!packageRoot) {
-      noPackageFiles.push(pathname);
-      return;
-    }
-    const existPackage = store.get(packageRoot);
-    if (existPackage) {
-      existPackage.changedFiles = existPackage.changedFiles || [];
-      existPackage.changedFiles.push(pathname);
-      return existPackage;
-    }
-    const package = {};
-    store.set(packageRoot, package);
-    const info = await getPackage(packageRoot).catch((e) => {
-      return {
-        packageRoot,
-        error: e,
-      };
-    });
-    Object.assign(package, info);
-    package.changedFiles = package.changedFiles || [];
-    package.changedFiles.push(pathname);
-    return package;
-  }
-
-  function getAllPackages() {
-    return Array.from(store.values());
-  }
-  function getAllNoPackageFile() {
-    return noPackageFiles;
-  }
-};
+const detect = require('./detect');
 
 const processPackageWithParallelFlag = (fn, packages, isParallel) => {
   if (isParallel) {
@@ -104,13 +56,8 @@ const tryGetPackagesFromTempFile = async () => {
   if (tmpResult) {
     return tmpResult;
   }
-  const changedFiles = await getChangedFile();
-  if (changedFiles.length === 0) return;
-  const store = createLibraryStore();
-  await Promise.all(changedFiles.map((filename) => store.process(filename)));
-  const packages = store.getAllPackages();
-  const noPackageFiles = store.getAllNoPackageFile();
-  return { packages, noPackageFiles };
+  const info = await detect();
+  return info;
 
   async function getFromTempFile() {
     try {
@@ -123,11 +70,32 @@ const tryGetPackagesFromTempFile = async () => {
 };
 
 const main = async () => {
+  if (PR_EVENT_ACTION === 'opened' && NOTIFY_CONFIG_JSON) {
+    try {
+      const { mailOption, subscribers } = JSON.parse(NOTIFY_CONFIG_JSON);
+      const transporter = nodemailer.createTransport(mailOption);
+      const prURI = `https://github.com/${HEAD_REPOSITORY}/pull/${PULL_REQUEST_ID}`;
+      await transporter.sendMail({
+        from: `"Github Action 👻" <${mailOption.auth.user}>`, // sender address
+        to: subscribers.join(', '), // list of receivers
+        subject: `New Pull Request In ${HEAD_REPOSITORY}`, // Subject line
+        text: `Hello, new pull request opened in ${HEAD_REPOSITORY}. [**Click here to see the content**](${prURI})`, // plain text body
+        html: `<span>Hello, new pull request opened in ${HEAD_REPOSITORY}. <b><a href="${prURI}">Click here to see the content!</a></b></span>`, // html body
+      });
+    } catch (e) {
+      console.log('There is error in send email');
+      console.error(e);
+    }
+  }
   const { packages, noPackageFiles } = await tryGetPackagesFromTempFile();
 
   const getValidPackages = () => packages.filter((p) => !p.error);
   const getErroredPackages = () => packages.filter((p) => !!p.error);
 
+  console.log(
+    '🚀 ~ file: check.js:75 ~ main ~ ALLOW_MODIFY_OTHERS:',
+    ALLOW_MODIFY_OTHERS,
+  );
   if (noPackageFiles.length > 0) {
     if (ALLOW_MODIFY_OTHERS === 'true') {
       console.warn(
@@ -150,6 +118,10 @@ const main = async () => {
   await customCheck({
     packages,
     exitWithMessage,
+    processPackageWithParallelFlag,
+    getValidPackages,
+    getErroredPackages,
+    processPackagesErrors,
   });
 
   // lint
