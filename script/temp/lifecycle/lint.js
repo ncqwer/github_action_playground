@@ -11,7 +11,7 @@ const BE_PREFERED_FILE = {
   'src/**/*.java': '缺少java代码',
   'pom.xml': '缺少pom.xml',
   'README.md': '缺少README.md',
-  '依赖库使用文档说明.docx': '缺少依赖库使用文档说明.docx',
+  '*.docx': '缺少依赖库使用文档说明.docx',
 };
 
 const createGlobDetecter = (info) => {

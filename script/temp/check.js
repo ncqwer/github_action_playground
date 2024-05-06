@@ -6,6 +6,10 @@ const {
   DEPLOY_WITH_PARALLEL,
   ONLY_ONE_PACKAGE_PER_PR,
   TEMP_FILE,
+  PR_EVENT_ACTION,
+  NOTIFY_CONFIG_JSON,
+  HEAD_REPOSITORY,
+  PULL_REQUEST_ID,
 } = require('./env');
 const { lint, complie, deploy } = require('./lifecycle');
 const {
@@ -15,6 +19,7 @@ const {
   toManyPackagesToMsg,
 } = require('./error');
 const { customCheck } = require('./customCheck');
+const nodemailer = require('nodemailer');
 
 const detect = require('./detect');
 
@@ -65,6 +70,23 @@ const tryGetPackagesFromTempFile = async () => {
 };
 
 const main = async () => {
+  if (PR_EVENT_ACTION === 'opened' && NOTIFY_CONFIG_JSON) {
+    try {
+      const { mailOption, subscribers } = JSON.parse(NOTIFY_CONFIG_JSON);
+      const transporter = nodemailer.createTransport(mailOption);
+      const prURI = `https://github.com/${HEAD_REPOSITORY}/pull/${PULL_REQUEST_ID}`;
+      await transporter.sendMail({
+        from: `"Github Action 👻" <${mailOption.auth.user}>`, // sender address
+        to: subscribers.join(', '), // list of receivers
+        subject: `New Pull Request In ${HEAD_REPOSITORY}`, // Subject line
+        text: `Hello, new pull request opened in ${HEAD_REPOSITORY}. [**Click here to see the content**](${prURI})`, // plain text body
+        html: `<span>Hello, new pull request opened in ${HEAD_REPOSITORY}. <b><a href="${prURI}">Click here to see the content!</a></b></span>`, // html body
+      });
+    } catch (e) {
+      console.log('There is error in send email');
+      console.error(e);
+    }
+  }
   const { packages, noPackageFiles } = await tryGetPackagesFromTempFile();
 
   const getValidPackages = () => packages.filter((p) => !p.error);

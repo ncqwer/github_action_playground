@@ -23,6 +23,8 @@ const TEMP_FILE = process.env.TEMP_FILE || 'diff_stat.json';
 
 const COMMIT_SHA = process.env.COMMIT_SHA || 'main';
 const AUTHOR_NAME = process.env.AUTHOR_NAME;
+const PR_EVENT_ACTION = process.env.PR_EVENT_ACTION;
+const NOTIFY_CONFIG_JSON = process.env.NOTIFY_CONFIG_JSON;
 
 module.exports = {
   ALLOW_MODIFY_OTHERS,
@@ -41,4 +43,6 @@ module.exports = {
   ARTIFACT_ID,
   COMMIT_SHA,
   AUTHOR_NAME,
+  PR_EVENT_ACTION,
+  NOTIFY_CONFIG_JSON,
 };

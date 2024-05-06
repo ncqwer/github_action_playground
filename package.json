@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "glob": "^10.3.12",
+    "nodemailer": "^6.9.13",
     "semver": "^7.6.0"
   }
 }

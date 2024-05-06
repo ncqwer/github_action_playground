@@ -77,7 +77,6 @@ const main = async () => {
 
   await processPackageWithParallelFlag(
     async ({ cwd, packageInfo, nextVersion, type }) => {
-      if (type !== 'f') return;
       const [zipFile] = await glob(['target/*.zip', '*.zip'], { cwd });
       let md5 = '';
       if (zipFile) {
@@ -86,27 +85,32 @@ const main = async () => {
         hash.update(fileContent);
         md5 = hash.digest('hex');
       }
-      await fsp.writeFile(
-        path.resolve(cwd, 'package.json'),
-        JSON.stringify(
-          Object.assign(
-            {
-              ...packageInfo,
-              version: nextVersion,
-            },
-            md5 && { lastRelease: md5 },
+      if (type === 'f') {
+        await fsp.writeFile(
+          path.resolve(cwd, 'package.json'),
+          JSON.stringify(
+            Object.assign(
+              {
+                ...packageInfo,
+                version: nextVersion,
+              },
+              md5 && { lastRelease: md5 },
+            ),
+            null,
+            2,
           ),
-          null,
-          2,
-        ),
-      );
+          'utf-8',
+        );
+      } else {
+        await fsp.writeFile(path.resolve(cwd, '.lastRelease'), md5, 'utf-8');
+      }
       await execCommand(`git tag ${packageInfo.name}@${nextVersion}`);
     },
     getValidPackages(),
     true,
   );
   await processPackagesErrors(getErroredPackages());
-  if (getValidPackages().filter((v) => v.type === 'f').length > 0) {
+  if (getValidPackages().length > 0) {
     await execCommands([
       'git add . ',
       'git commit -q -m "publish version by ci"',

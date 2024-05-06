@@ -4,11 +4,10 @@ const { execCommand } = require('../utils/execCommand');
 const { createTagAndRelease, uploadReleaseAssets } = require('../github');
 
 const isRelease = process.argv[2] === 'from-release';
-const deploy = async ({ cwd, packageName, nextVersion, type }) => {
+const deploy = async ({ cwd, packageName, nextVersion }) => {
   const [zipFile] = await glob(['target/*.zip', '*.zip'], { cwd });
-  const [docxFile] = await glob('依赖库使用文档说明.docx', { cwd });
+  const [docxFile] = await glob('*.docx', { cwd });
   if (isRelease) {
-    if (type !== 'f') return;
     const id = await createTagAndRelease(`${packageName}@${nextVersion}`);
     await uploadReleaseAssets(
       id,

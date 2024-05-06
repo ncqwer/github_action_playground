@@ -129,6 +129,8 @@ jobs:
           HEAD_REPOSITORY: ${{github.event.pull_request.head.repo.full_name}}
           GITHUB_REPOSITORY: ${{github.repository}}
           ACTION_ID: ${{github.run_id}}
+          PR_EVENT_ACTION: ${{github.event.action}}
+          NOTIFY_CONFIG_JSON: ${{secrets.NOTIFY_CONFIG_JSON}}
 
       - name: Upload PR Result Error
         if: ${{fromJson(env.CHECK_RESULT).hasError}}
