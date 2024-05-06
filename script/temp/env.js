@@ -1,4 +1,8 @@
-const ALLOW_MODIFY_OTHERS = process.env.ALLOW_MODIFY_OTHERS || 'false'; // 是否允许配置非依赖库文件
+const ALLOW_MODIFY_OTHERS =
+  process.env.ALLOW_MODIFY_OTHERS ||
+  (process.env.HEAD_REPOSITORY === process.env.BASE_REPOSITORY
+    ? 'true'
+    : 'false'); // 是否允许配置非依赖库文件
 
 const LINT_WITH_PARALLEL = process.env.LINT_WITH_PARALLEL || 'true'; // lint parallel
 const COMPlIE_WITH_PARALLEL = process.env.BUILD_WITH_PARALLEL || 'true'; // complie parallel
@@ -12,6 +16,9 @@ const GITHUB_REPOSITORY =
   process.env.GITHUB_REPOSITORY || 'netease-lcap/CodeWaveAssetCompetition2024d';
 const HEAD_REPOSITORY =
   process.env.HEAD_REPOSITORY || 'netease-lcap/CodeWaveAssetCompetition2024';
+
+const BASE_REPOSITORY =
+  process.env.BASE_REPOSITORY || 'netease-lcap/CodeWaveAssetCompetition2024d';
 const PULL_REQUEST_ID = process.env.PULL_REQUEST_ID || '106';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
@@ -38,6 +45,7 @@ module.exports = {
   AUTO_ADJUST_RESOLUTION,
   GITHUB_REPOSITORY,
   HEAD_REPOSITORY,
+  BASE_REPOSITORY,
   PULL_REQUEST_ID,
   GITHUB_TOKEN,
   HEAD_BRANCH_NAME,

@@ -8,8 +8,8 @@ const {
   TEMP_FILE,
   PR_EVENT_ACTION,
   NOTIFY_CONFIG_JSON,
-  HEAD_REPOSITORY,
   PULL_REQUEST_ID,
+  BASE_REPOSITORY,
 } = require('./env');
 const { lint, complie, deploy } = require('./lifecycle');
 const {
@@ -74,13 +74,13 @@ const main = async () => {
     try {
       const { mailOption, subscribers } = JSON.parse(NOTIFY_CONFIG_JSON);
       const transporter = nodemailer.createTransport(mailOption);
-      const prURI = `https://github.com/${HEAD_REPOSITORY}/pull/${PULL_REQUEST_ID}`;
+      const prURI = `https://github.com/${BASE_REPOSITORY}/pull/${PULL_REQUEST_ID}`;
       await transporter.sendMail({
         from: `"Github Action 👻" <${mailOption.auth.user}>`, // sender address
         to: subscribers.join(', '), // list of receivers
-        subject: `New Pull Request In ${HEAD_REPOSITORY}`, // Subject line
-        text: `Hello, new pull request opened in ${HEAD_REPOSITORY}. [**Click here to see the content**](${prURI})`, // plain text body
-        html: `<span>Hello, new pull request opened in ${HEAD_REPOSITORY}. <b><a href="${prURI}">Click here to see the content!</a></b></span>`, // html body
+        subject: `New Pull Request In ${BASE_REPOSITORY}`, // Subject line
+        text: `Hello, new pull request opened in ${BASE_REPOSITORY}. [**Click here to see the content**](${prURI})`, // plain text body
+        html: `<span>Hello, new pull request opened in ${BASE_REPOSITORY}. <b><a href="${prURI}">Click here to see the content!</a></b></span>`, // html body
       });
     } catch (e) {
       console.log('There is error in send email');
