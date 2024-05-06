@@ -127,6 +127,7 @@ jobs:
           PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
           HEAD_BRANCH_NAME: ${{github.head_ref}}
           HEAD_REPOSITORY: ${{github.event.pull_request.head.repo.full_name}}
+          BASE_REPOSITORY: ${{github.event.pull_request.base.repo.full_name}}
           GITHUB_REPOSITORY: ${{github.repository}}
           ACTION_ID: ${{github.run_id}}
           PR_EVENT_ACTION: ${{github.event.action}}
@@ -162,6 +163,7 @@ jobs:
           PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
           HEAD_BRANCH_NAME: ${{github.head_ref}}
           HEAD_REPOSITORY: ${{github.event.pull_request.head.repo.full_name}}
+          BASE_REPOSITORY: ${{github.event.pull_request.base.repo.full_name}}
           GITHUB_REPOSITORY: ${{github.repository}}
           ACTION_ID: ${{github.run_id}}
 
