@@ -26,6 +26,10 @@ const AUTHOR_NAME = process.env.AUTHOR_NAME;
 const PR_EVENT_ACTION = process.env.PR_EVENT_ACTION;
 const NOTIFY_CONFIG_JSON = process.env.NOTIFY_CONFIG_JSON;
 
+const AMC_URL = process.env.AMC_URL;
+const AMC_BODY = process.env.AMC_BODY;
+const AMU_URL = process.env.AMU_URL;
+
 module.exports = {
   ALLOW_MODIFY_OTHERS,
   LINT_WITH_PARALLEL,
@@ -45,4 +49,7 @@ module.exports = {
   AUTHOR_NAME,
   PR_EVENT_ACTION,
   NOTIFY_CONFIG_JSON,
+  AMC_URL,
+  AMC_BODY,
+  AMU_URL,
 };

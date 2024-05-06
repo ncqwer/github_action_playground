@@ -3,6 +3,9 @@ const {
   COMPlIE_WITH_PARALLEL,
   DEPLOY_WITH_PARALLEL,
   TEMP_FILE,
+  AMC_URL,
+  AMU_URL,
+  AMC_BODY,
 } = require('./env');
 const crypto = require('crypto');
 const { complie, deploy } = require('./lifecycle');
@@ -11,6 +14,7 @@ const detect = require('./detect');
 const { execCommands, execCommand } = require('./utils/execCommand');
 const path = require('path');
 const { glob } = require('glob');
+const fetch = require('node-fetch');
 
 const processPackageWithParallelFlag = (fn, packages, isParallel) => {
   if (isParallel) {
@@ -118,9 +122,33 @@ const main = async () => {
     ]);
   }
   await fsp.mkdir('dist');
+  let uploadFn = () => Promise.resolve(null);
+  if (AMC_URL && AMU_URL && AMC_BODY) {
+    // todo: 上传到资产市场，当前为测试参数，请调整为正常接口参数。
+    const { token } = await fetch(AMC_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: AMC_BODY,
+    }).then((v) => v.json());
+
+    uploadFn = async (form) => {
+      await fetch(AMU_URL, {
+        method: 'POST',
+        body: form,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          ...form.getHeaders(),
+        },
+      });
+      return 'ok';
+    };
+  }
   // deploy
   await processPackageWithParallelFlag(
-    deploy,
+    (info) => deploy(info, uploadFn),
     getValidPackages(),
     DEPLOY_WITH_PARALLEL === 'true',
   );
